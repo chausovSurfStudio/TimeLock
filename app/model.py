@@ -47,6 +47,7 @@ class User(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, default = False)
     nfc_label = db.Column(db.String(64), unique = True, index = True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     #other info
     first_name = db.Column(db.String(64))
     middle_name = db.Column(db.String(64))
@@ -102,6 +103,13 @@ class User(UserMixin, db.Model):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
+    def password_is_empty(self):
+        if not self.password_hash:
+            print('not password hash, BITCH')
+        else:
+            print('password hash ALREADY EXISTS')
+        return not self.password_hash
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -117,3 +125,14 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Company(db.Model):
+    __tablename__ = 'companies'
+    id = db.Column(db.Integer, primary_key = True)
+    company_name = db.Column(db.String(64), unique = True, index = True)
+    users = db.relationship('User', backref = 'company', lazy = 'dynamic')
+
+
+
+

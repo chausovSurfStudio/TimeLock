@@ -1,0 +1,9 @@
+Добро пожаловать в TimeLock!
+
+Дело в том, что в системе TimeLock была зарегистрирована новая компания под названием {{ company_name }} и вы являетесь модератором внутри нее в данной системе!
+
+Для подтверждения сего чуда пройдите по данной ссылке:
+
+{{ url_for('main.confirm_moderator', token = token, email = email, company_name = company_name, _external=True) }}
+
+Удачи!
