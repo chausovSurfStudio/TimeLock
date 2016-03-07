@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
-from app.model import User, Company
+from app.model import User, Company, Role
 from app.decorators import admin_required
 from forms import NewCompanyForm, SetPasswordForm
 from app.email import send_email
@@ -22,8 +22,11 @@ def new_company():
 		user = User.query.filter_by(email = form.email.data).first()
 		if user is None:
 			user = User(email = form.email.data)
-			db.session.add(user)
-			db.session.commit()
+		moderator_role = Role.query.filter_by(name = 'Moderator').first()
+		user.role = moderator_role
+		user.company = company
+		db.session.add(user)
+		db.session.commit()
 		token = user.generate_confirmation_token()
 		send_email(user.email, 'Confirm Your Account', 'mail/confirm_moderator', company_name = company.company_name, token = token, email = form.email.data)
 		flash('You create new company, message to moderator has been sent')
@@ -69,7 +72,7 @@ def confirm_moderator(token, email, company_name):
 		if current_user.confirmed:
 			return redirect(url_for('main.index'))
 		if current_user.email != email:
-			flash('Email in this link is not match with current account')
+			flash('Email in this link is not mutch with current account')
 			return redirect(url_for('main.index'))
 	return redirect(url_for('main.index'))
 

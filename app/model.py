@@ -31,7 +31,7 @@ class Role(db.Model):
             role = Role.query.filter_by(name = r).first()
             if role is None:
                 role = Role(name = r)
-            role.permissions = roles[r][0]
+            role.permissions = roles[r]
             db.session.add(role)
         db.session.commit()
 
