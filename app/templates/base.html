@@ -82,8 +82,7 @@
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Аккаунт <b class="caret"></b>
 	                    </a>
 	                    <ul class="dropdown-menu">
-	                        <li><a href="/">Изменить пароль</a></li>
-	                        <li><a href="/">Изменить email</a></li>
+	                        <li><a href="{{ url_for('auth.change_password') }}">Изменить пароль</a></li>
 	                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
 	                    </ul>
                 	</li>

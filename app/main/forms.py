@@ -55,3 +55,4 @@ class EditProfileAdminForm(Form):
     def validate_nfc_label(self, field):
         if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = filed.data).first():
             raise ValidationError('NFC label already in use')
+

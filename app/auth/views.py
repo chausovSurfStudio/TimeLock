@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from . import auth
 from app import db
 from app.model import User
-from .forms import LoginForm
+from .forms import LoginForm, ChangePasswordForm
 
 @auth.before_app_request
 def before_request():
@@ -28,3 +28,16 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('main.index'))
+
+@auth.route('/change_password', methods = ['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        current_user.password = form.password.data
+        db.session.add(current_user)
+        db.session.commit()
+        login_user(current_user)
+        flash('Password has been reset')
+        return redirect(url_for('main.index'))
+    return render_template('auth/change_password.html', form = form)
