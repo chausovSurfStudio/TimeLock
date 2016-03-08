@@ -4,7 +4,7 @@ from . import main
 from app import db
 from app.model import User, Company, Role
 from app.decorators import admin_required
-from forms import NewCompanyForm, SetPasswordForm, EditProfileForm
+from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm
 from app.email import send_email
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -118,27 +118,30 @@ def edit_profile():
 @login_required
 @admin_required
 def edit_profile_admin(id):
+    print('QWEQWEQWE')
     user = User.query.get_or_404(id)
-    form = EditProfileAdminForm(user=user)
+    form = EditProfileAdminForm(user = user)
     if form.validate_on_submit():
-        user.email = form.email.data
         user.username = form.username.data
-        user.confirmed = form.confirmed.data
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.middle_name = form.middle_name.data
         user.role = Role.query.get(form.role.data)
-        user.name = form.name.data
-        user.location = form.location.data
-        user.about_me = form.about_me.data
+        user.company = Company.query.get(form.company.data)
+        user.nfc_label = form.nfc_label.data
+        user.confirmed = form.confirmed.data
         db.session.add(user)
         flash('The profile has been updated.')
-        return redirect(url_for('.user', username=user.username))
-    form.email.data = user.email
+        return redirect(url_for('main.user', user_id = user.id))
     form.username.data = user.username
-    form.confirmed.data = user.confirmed
+    form.first_name.data = user.first_name
+    form.last_name.data = user.last_name
+    form.middle_name.data = user.middle_name
     form.role.data = user.role_id
-    form.name.data = user.name
-    form.location.data = user.location
-    form.about_me.data = user.about_me
-    return render_template('edit_profile.html', form=form, user=user)
+    form.company.data = user.company_id
+    form.nfc_label.data = user.nfc_label
+    form.confirmed.data = user.confirmed
+    return render_template('edit_profile.html', form = form, user = user)
 
 @main.route('/my_company', methods = ['GET'])
 @login_required
