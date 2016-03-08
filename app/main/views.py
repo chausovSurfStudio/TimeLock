@@ -11,8 +11,8 @@ from app.email import send_email
 def index():
     return render_template('index.html')
 
-@admin_required
 @main.route('/new_company', methods = ['GET', 'POST'])
+@admin_required
 def new_company():
 	form = NewCompanyForm()
 	if form.validate_on_submit():
@@ -33,20 +33,20 @@ def new_company():
 		return redirect(url_for('main.index'))
 	return render_template('new_company.html', form = form)
 
-@admin_required
 @main.route('/companies', methods = ['GET'])
+@admin_required
 def companies():
 	companies = Company.query.order_by(Company.company_name).all()
 	return render_template('companies.html', companies = companies)
 
-@admin_required
 @main.route('/clear_companies', methods = ['GET', 'POST'])
+@admin_required
 def clear_companies():
 	Company.query.delete()
 	return redirect(url_for('main.index'))
 
-@admin_required
 @main.route('/clear_users', methods = ['GET', 'POST'])
+@admin_required
 def clear_users():
 	User.query.delete()
 	return redirect(url_for('main.index'))
@@ -114,7 +114,7 @@ def edit_profile():
     return render_template('edit_profile.html', form = form)
 
 
-@main.route('/edit-profile/<int:id>', methods = ['GET', 'POST'])
+@main.route('/edit_profile/<int:id>', methods = ['GET', 'POST'])
 @login_required
 @admin_required
 def edit_profile_admin(id):
@@ -140,5 +140,10 @@ def edit_profile_admin(id):
     form.about_me.data = user.about_me
     return render_template('edit_profile.html', form=form, user=user)
 
+@main.route('/my_company', methods = ['GET'])
+@login_required
+def my_company():
+	company = current_user.company;
+	return render_template('company.html', company = company)
 
 

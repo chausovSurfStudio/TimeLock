@@ -99,15 +99,14 @@ class User(UserMixin, db.Model):
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
 
+    def is_moderator(self):
+        return self.can(Permission.MODERATOR)
+
     def ping(self):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
     def password_is_empty(self):
-        if not self.password_hash:
-            print('not password hash, BITCH')
-        else:
-            print('password hash ALREADY EXISTS')
         return not self.password_hash
 
     def __repr__(self):
