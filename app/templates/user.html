@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Flasky - Profile{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+    	{% if user.username %}
+    		<h1>{{ user.username }}</h1>
+    	{% endif %}
+
+		{% if user.first_name or user.last_name %}
+		<p>
+			{% if user.last_name %}{{ user.last_name }}{% endif %}
+			{% if user.first_name %}{{ user.first_name }}{% endif %}
+			{% if user.middle_name %}{{ user.middle_name }}{% endif %}
+		</p>
+		{% endif %}
+
+		<p>
+			Member since {{ moment(user.member_since).format('L') }}.
+			Last seen {{ moment(user.last_seen).fromNow() }}
+		</p>
+
+		<p>Адрес электронной почты: {{ current_user.email }}</p>
+		<p>Роль: {{ current_user.role.name }}</p>
+		{% if user.company %}
+    		<h1>Работает в компании {{ user.company.company_name }}</h1>
+    	{% endif %}
+		<br>
+
+		{% if user == current_user %}
+		<a class="btn btn-default"  href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
+		{% endif %}
+		
+		{% if current_user.is_administrator() %}
+		<a class="btn btn-danger" href="{{ url_for('main.index') }}">Edit Profile [Admin]</a>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

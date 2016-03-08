@@ -5,6 +5,11 @@ from app import db
 from app.model import User
 from .forms import LoginForm
 
+@auth.before_app_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.ping()
+
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
     form = LoginForm()

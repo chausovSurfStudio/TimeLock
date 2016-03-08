@@ -22,3 +22,11 @@ class SetPasswordForm(Form):
 	password = PasswordField('Password', validators = [Required(), EqualTo('password2', message = 'Passwords must much')])
 	password2 = PasswordField('Confirm password', validators = [Required()])
 	submit = SubmitField('Register')
+
+class EditProfileForm(Form):
+    username = StringField('Username', validators = [Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Usernames must have only letters, numbers, dots or underscores')])
+    first_name = StringField('First Name', validators = [Length(0, 64)])
+    last_name = StringField('Last Name', validators = [Length(0, 64)])
+    middle_name = StringField('Middle Name', validators = [Length(0, 64)])
+    nfc_label = StringField('NFC-label', validators = [Length(0, 64)])
+    submit = SubmitField('Submit')
