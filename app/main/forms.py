@@ -56,3 +56,11 @@ class EditProfileAdminForm(Form):
         if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = filed.data).first():
             raise ValidationError('NFC label already in use')
 
+class ResetPasswordRequestForm(Form):
+    email = StringField('Email', validators = [Required(), Length(1, 64), Email()])
+    submit = SubmitField('Send mail to reset password')
+
+    def validate_email(self, field):
+        user = User.query.filter_by(email = field.data).first()
+        if not user:
+            raise ValidationError('Specified address is not registered')

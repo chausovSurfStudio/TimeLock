@@ -4,7 +4,7 @@ from . import main
 from app import db
 from app.model import User, Company, Role
 from app.decorators import admin_required
-from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm
+from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm
 from app.email import send_email
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -154,6 +154,32 @@ def my_company():
 def company(company_name):
 	company = Company.query.filter_by(company_name = company_name).first()
 	return render_template('company.html', company = company)
+
+@main.route('/reset_password_request', methods = ['GET', 'POST'])
+def reset_password_request():
+	form = ResetPasswordRequestForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email = form.email.data).first()
+		token = user.generate_confirmation_token()
+		send_email(user.email, 'Reset your password', 'mail/reset_password', token = token, email = form.email.data, user = user)
+		flash('Mail with special link has been send in your email address')
+		return redirect(url_for('main.index'))
+	return render_template('reset_password_request.html', form = form)
+
+@main.route('/reset_password/<token>/<email>', methods = ['GET', 'POST'])
+def reset_password(token, email):
+	user = User.query.filter_by(email = email).first()
+	if user is not None and user.confirm(token):
+		form = SetPasswordForm()
+		if form.validate_on_submit():
+			user.password = form.password.data
+			db.session.add(user)
+			flash('Password has been updated')
+			return redirect(url_for('auth.login'))
+		return render_template('set_password.html', form = form)
+	else:
+		flash('The confirmation link is invalid or has expired')
+		return redirect(url_for('main.index'))
 
 
 
