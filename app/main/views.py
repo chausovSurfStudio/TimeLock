@@ -146,4 +146,12 @@ def my_company():
 	company = current_user.company;
 	return render_template('company.html', company = company)
 
+@main.route('/company/<company_name>', methods = ['GET'])
+@admin_required
+def company(company_name):
+	company = Company.query.filter_by(company_name = company_name).first()
+	return render_template('company.html', company = company)
+
+
+
 

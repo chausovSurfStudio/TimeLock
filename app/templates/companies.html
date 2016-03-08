@@ -6,15 +6,12 @@
 {% endblock %}
 
 {% block page_content %} 
-	<div class="page-header">
-	    <h1>Список существующих компаний</h1>
-	</div>
-
+	<h1>Список существующих компаний</h1>
 	<ul class = "posts">
     {% for company in companies %}
     <li class = "post">
 	    <div class="post-content">
-	    	<div class="post-body">{{ company.company_name }}</div>
+	    	<div class="post-body"><h2><a href="{{ url_for('main.company', company_name = company.company_name) }}">{{ company.company_name }}</a></h2></div>
     	</div>
     </li>
     {% endfor %}
