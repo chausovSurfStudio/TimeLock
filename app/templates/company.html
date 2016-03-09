@@ -11,4 +11,8 @@
 	</div>
 	<p>Список сотрудников:</p>
 	{% include '_employees.html' %}
+	<br>
+	{% if current_user.is_administrator() or current_user.is_moderator() %}
+		<a class="btn btn-default"  href="{{ url_for('main.user_add', company_name = company.company_name) }}">Добавить пользователя</a>
+	{% endif %}
 {% endblock %}

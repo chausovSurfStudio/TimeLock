@@ -17,3 +17,6 @@ def permission_required(permission):
 
 def admin_required(f):
     return permission_required(Permission.ADMINISTER)(f)
+
+def admin_moderator_required(f):
+	return permission_required(Permission.MODERATOR)(f)

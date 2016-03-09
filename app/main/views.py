@@ -3,8 +3,8 @@ from flask.ext.login import login_required, current_user
 from . import main
 from app import db
 from app.model import User, Company, Role
-from app.decorators import admin_required
-from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm
+from app.decorators import admin_required, admin_moderator_required
+from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm
 from app.email import send_email
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -116,9 +116,8 @@ def edit_profile():
 
 @main.route('/edit_profile/<int:id>', methods = ['GET', 'POST'])
 @login_required
-@admin_required
+@admin_moderator_required
 def edit_profile_admin(id):
-    print('QWEQWEQWE')
     user = User.query.get_or_404(id)
     form = EditProfileAdminForm(user = user)
     if form.validate_on_submit():
@@ -180,6 +179,39 @@ def reset_password(token, email):
 	else:
 		flash('The confirmation link is invalid or has expired')
 		return redirect(url_for('main.index'))
+
+@main.route('/user_add/<company_name>', methods = ['GET', 'POST'])
+@admin_moderator_required
+def user_add(company_name):
+	form = NewUserForm()
+	if form.validate_on_submit():
+		user = User(email = form.email.data, first_name = form.first_name.data, last_name = form.last_name.data, nfc_label = form.nfc_label.data)
+		user.password = form.password.data
+		user.company = Company.query.filter_by(company_name = company_name).first()
+		db.session.add(user)
+		db.session.commit()
+		token = user.generate_confirmation_token()
+		send_email(user.email, 'New user registered', 'mail/new_user', token = token, user = user, password = form.password.data)
+		flash('New user has been create')
+		return redirect(url_for('main.index'))
+	return render_template('user_add.html', form = form, company_name = company_name)
+
+@main.route('/confirm_new_user/<token>')
+@login_required
+def confirm_new_user(token):
+    if current_user.confirmed:
+        return redirect(url_for('main.index'))
+    if current_user.confirm(token):
+        flash('You have confirmed your account, thanks!')
+    else:
+        flash('The confirmation link is invalid or has expired')
+    return redirect(url_for('main.index'))
+
+
+
+
+
+
 
 
 

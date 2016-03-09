@@ -1,0 +1,6 @@
+<p>Уважаемый (ая) {{ user.last_name }} {{ user.first_name }}, </p>
+<p>Добро пожаловать в TimeLock!</p>
+<p>Для подтверждения вашего аккаунта зайдите на сайт ({{ url_for('main.index', _external = True) }}), авторизуйтесь, а затем пройдите по ссылке:</p>
+<p>{{ url_for('main.confirm_new_user', token = token, _external = True) }}</p>
+<p>Ваш пароль: {{ password }}</p>
+<p>Всего хорошего!</p>

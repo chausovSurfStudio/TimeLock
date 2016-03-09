@@ -49,11 +49,11 @@ class EditProfileAdminForm(Form):
         self.user = user
 
     def validate_username(self, field):
-        if field.data != self.user.username and User.query.filter_by(username = filed.data).first():
+        if field.data != self.user.username and User.query.filter_by(username = field.data).first():
             raise ValidationError('Username already in use')
 
     def validate_nfc_label(self, field):
-        if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = filed.data).first():
+        if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = field.data).first():
             raise ValidationError('NFC label already in use')
 
 class ResetPasswordRequestForm(Form):
@@ -64,3 +64,19 @@ class ResetPasswordRequestForm(Form):
         user = User.query.filter_by(email = field.data).first()
         if not user:
             raise ValidationError('Specified address is not registered')
+
+class NewUserForm(Form):
+    email = StringField('User email', validators = [Required(), Length(1, 64), Email()])
+    password = StringField('Password', validators = [Required(), Length(1, 64)])
+    first_name = StringField('First Name', validators = [Length(1, 64)])
+    last_name = StringField('Last Name', validators = [Length(1, 64)])
+    nfc_label = StringField('NFC-label', validators = [Length(1, 64)])
+    submit = SubmitField('Submit')
+
+    def validate_email(self, field):
+        user = User.query.filter_by(email = field.data).first()
+        if user is not None:
+            raise ValidationError('Email already registered')
+
+
+
