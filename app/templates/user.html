@@ -36,6 +36,20 @@
 		{% if current_user.is_administrator() or (current_user.is_moderator() and current_user.company == user.company and not user.is_administrator())%}
 		<a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id = user.id) }}">Edit Profile [Admin]</a>
 		{% endif %}
+
 	</div>
 </div>
+
+<canvas class="box" id="Mycanvas" width="840" height="30" border="6"></canvas>
+<script>
+	var canvas = document.getElementById('Mycanvas');
+	var holst = canvas.getContext('2d');
+	var my_gradient = holst.createLinearGradient(350,0,700,0);
+	my_gradient.addColorStop(0,"yellow");
+	my_gradient.addColorStop(1,"green");
+	holst.fillStyle = my_gradient;  
+	holst.fillRect(350, 0, 350, 30);  
+	holst.strokeStyle = "rgb(103, 103, 103)";
+	holst.strokeRect(0, 0, 840, 30);
+</script>
 {% endblock %}
