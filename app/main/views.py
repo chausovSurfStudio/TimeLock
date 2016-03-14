@@ -6,6 +6,7 @@ from app.model import User, Company, Role
 from app.decorators import admin_required, admin_moderator_required
 from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm
 from app.email import send_email
+from datetime import datetime, timedelta, date, time as dt_time
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
@@ -91,6 +92,18 @@ def set_password(email, company_name):
 @login_required
 def user(user_id):
     user = User.query.filter_by(id = user_id).first_or_404()
+    
+    print(user.member_since.strftime('%y-%m-%d %H:%M:%S'))
+    d = user.member_since.date()
+
+    delta = timedelta(days = d.weekday() + 7)
+    lm = d - delta
+    print("last monday = ", lm.strftime('%y-%m-%d %H:%M:%S'))
+    delta = timedelta(days = 7 - d.weekday())
+    nm = d + delta
+
+    print("next monday", nm.strftime('%y-%m-%d %H:%M:%S'))
+
     return render_template('user.html', user=user)
 
 @main.route('/edit_profile', methods = ['GET', 'POST'])
