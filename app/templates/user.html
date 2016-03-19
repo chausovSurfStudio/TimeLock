@@ -18,7 +18,7 @@
 		{% endif %}
 
 		<p>
-			Member since {{ moment(user.member_since).format('MMMM Do YYYY, h:mm:ss a') }}.
+			Member since {{ moment(user.member_since).format('LLLL') }}.
 			Last seen {{ moment(user.last_seen).fromNow() }}
 		</p>
 

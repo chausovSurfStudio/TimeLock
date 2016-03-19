@@ -4,12 +4,32 @@
 
 {% block page_content %}
 <div class="page-header">
-    <div class="profile-header">
 
-		<a class="btn btn-default"  href="{{ url_for('checkin.index') }}">Чекин 1 вариант</a>
-		
+		<a class="btn btn-default"  href="{{ url_for('checkin.checkin_with_current_time') }}">Чекин 1 вариант</a>
+		<br>
+		<br>
 		<a class="btn btn-danger" href="{{ url_for('checkin.index') }}">Чекин 2 вариант</a>
 
-	</div>
+</div>
+<div>
+	{% if checkins.count() > 0 %}
+		<p>Чекины есть</p>
+		<ul class = "posts">
+		    {% for checkin in checkins %}
+		    <li class = "post">
+			    <div class="post-content">
+			    	<div class="post-date">{{ moment(checkin.time).format('MMMM Do YYYY, HH:mm:ss') }}</div>
+			    	<div class="post-author">
+			    		<a href="{{ url_for('main.user', user_id = checkin.user_id) }}">
+			    			{{ user.username }}
+			    		</a>
+			    	</div>
+		    	</div>
+		    </li>
+		    {% endfor %}
+		</ul>
+	{% else %}
+		<p>Чекинов нет</p>
+	{% endif %}
 </div>
 {% endblock %}
