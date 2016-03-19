@@ -48,6 +48,7 @@ class User(UserMixin, db.Model):
     nfc_label = db.Column(db.String(64), unique = True, index = True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
+    checkins = db.relationship('Checkin', backref = 'user', lazy = 'dynamic')
     #other info
     first_name = db.Column(db.String(64))
     middle_name = db.Column(db.String(64))
@@ -132,6 +133,11 @@ class Company(db.Model):
     company_name = db.Column(db.String(64), unique = True, index = True)
     users = db.relationship('User', backref = 'company', lazy = 'dynamic')
 
-
+class Checkin(db.Model):
+    __tablename__ = 'checkins'
+    id = db.Column(db.Integer, primary_key = True)
+    time = db.Column(db.DateTime(), default = datetime.utcnow)
+    trustLevel = db.Column(db.Boolean, default = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
