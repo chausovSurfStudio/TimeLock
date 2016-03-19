@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}TimeLock - Checkin{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+
+		<a class="btn btn-default"  href="{{ url_for('checkin.index') }}">Чекин 1 вариант</a>
+		
+		<a class="btn btn-danger" href="{{ url_for('checkin.index') }}">Чекин 2 вариант</a>
+
+	</div>
+</div>
+{% endblock %}
