@@ -1,0 +1,29 @@
+        
+
+<ul class = "pagination">
+	{% if page == 1 %}
+		<li class = "disabled">
+			<a href="#">&laquo;</a>
+		</li>
+	{% else %}
+		<li>
+			<a href="{{ url_for('checkin.index', page = page - 1) }}">&laquo;</a>
+		</li>
+	{% endif %}
+
+	{% if page >= 3 %}
+		<li class = "disabled"><a href="#">&hellip;</a></li>
+	{% endif %}
+
+	{% if page == 1 %}
+		<li class = "active"><a href="{{ url_for('checkin.index', page = page) }}">{{ need_title }}</a></li>
+		<li><a href="{{ url_for('checkin.index', page = page + 1) }}">{{ prev_title }}</a></li>
+	{% else %}
+		<li><a href="{{ url_for('checkin.index', page = page - 1) }}">{{ next_title }}</a></li>
+		<li class = "active"><a href="{{ url_for('checkin.index', page = page) }}">{{ need_title }}</a></li>
+		<li><a href="{{ url_for('checkin.index', page = page + 1) }}">{{ prev_title }}</a></li>
+	{% endif %}
+
+	<li class = "disabled"><a href="#">&hellip;</a></li>
+	<li><a href="{{ url_for('checkin.index', page = page + 1) }}">&raquo;</a></li>
+</ul>

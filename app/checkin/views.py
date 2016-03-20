@@ -16,8 +16,20 @@ def index():
     checkins = Checkin.get_checkins_page(page)
     keys = checkins.keys()
     keys.sort()
-    print('keys',keys)
-    return render_template('checkin/checkin_main.html', user = current_user, checkins = checkins, keys = keys)
+
+    needed_monday = keys[0]
+    needed_sunday = needed_monday + timedelta(days = 6)
+    prev_monday = needed_monday - timedelta(days = 7)
+    prev_sunday = needed_sunday - timedelta(days = 7)
+    next_monday = needed_monday + timedelta(days = 7)
+    next_sunday = needed_sunday + timedelta(days = 7)
+
+    need_week_title = needed_monday.strftime('%d.%m') + " - " + needed_sunday.strftime('%d.%m')
+    prev_week_title = prev_monday.strftime('%d.%m') + " - " + prev_sunday.strftime('%d.%m')
+    next_week_title = next_monday.strftime('%d.%m') + " - " + next_sunday.strftime('%d.%m')
+
+    return render_template('checkin/checkin_main.html', user = current_user, checkins = checkins, keys = keys, page = page, 
+    	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title)
 
 
 @checkin.route('/current_time', methods = ['GET', 'POST'])

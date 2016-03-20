@@ -11,10 +11,8 @@
 		<a class="btn btn-danger" href="{{ url_for('checkin.index') }}">Чекин 2 вариант</a>
 
 </div>
+
 <div>
-
-
-
 	{% for key in keys %}
 		<h3>{{ moment(key).format('MMMM Do YYYY') }}</h3>
 		{% if checkins[key].count() == 0 %}
@@ -36,5 +34,9 @@
 			</ul>
 		{% endif %}
 	{% endfor %}
+</div>
+
+<div class = "pagination">
+	{% include '_pagination_checkin.html' %}
 </div>
 {% endblock %}

@@ -154,10 +154,6 @@ class Checkin(db.Model):
         sunday = saturday + timedelta(days = 1)
         next_monday = sunday + timedelta(days = 1)
 
-        print("last monday = ", monday.strftime('%y-%m-%d %H:%M:%S'))
-        print("next monday = ", next_monday.strftime('%y-%m-%d %H:%M:%S'))
-
-        checkins = Checkin.query.filter(Checkin.time.between(monday, next_monday)).filter_by(user_id = current_user.id)
         dict = {
         monday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(monday, tuesday)),
         tuesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(tuesday, wednesday)),
