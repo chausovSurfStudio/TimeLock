@@ -1,9 +1,9 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask.ext.login import UserMixin, AnonymousUserMixin
+from flask.ext.login import UserMixin, AnonymousUserMixin, current_user
 from . import db, login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
-from datetime import datetime
+from datetime import datetime, timedelta, date, time as dt_time
 
 class Permission:
     CHECKIN = 0x01
@@ -139,5 +139,36 @@ class Checkin(db.Model):
     time = db.Column(db.DateTime(), default = datetime.utcnow)
     trustLevel = db.Column(db.Boolean, default = False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    @staticmethod
+    def get_checkins_page(page):
+        current_day = datetime.now().date()
+        delta = timedelta(days = current_day.weekday() + 7 * (page - 1))
+
+        monday = current_day - delta
+        tuesday = monday + timedelta(days = 1)
+        wednesday = tuesday + timedelta(days = 1)
+        thursday = wednesday + timedelta(days = 1)
+        friday = thursday + timedelta(days = 1)
+        saturday = friday + timedelta(days = 1)
+        sunday = saturday + timedelta(days = 1)
+        next_monday = sunday + timedelta(days = 1)
+
+        print("last monday = ", monday.strftime('%y-%m-%d %H:%M:%S'))
+        print("next monday = ", next_monday.strftime('%y-%m-%d %H:%M:%S'))
+
+        checkins = Checkin.query.filter(Checkin.time.between(monday, next_monday)).filter_by(user_id = current_user.id)
+        dict = {
+        monday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(monday, tuesday)),
+        tuesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(tuesday, wednesday)),
+        wednesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(wednesday, thursday)),
+        thursday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(thursday, friday)),
+        friday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(friday, saturday)),
+        saturday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(saturday, sunday)),
+        sunday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(sunday, next_monday))
+        }
+        return dict
+
+
 
 
