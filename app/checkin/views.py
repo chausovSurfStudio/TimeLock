@@ -13,8 +13,8 @@ from datetime import datetime, timedelta, date, time as dt_time
 @login_required
 def index():
     page = request.args.get('page', 1, type = int)
-    checkins = Checkin.get_checkins_page(page)
-    keys = checkins.keys()
+    graphs = Checkin.get_checkins_page(page)
+    keys = graphs.keys()
     keys.sort()
 
     needed_monday = keys[0]
@@ -28,7 +28,7 @@ def index():
     prev_week_title = prev_monday.strftime('%d.%m') + " - " + prev_sunday.strftime('%d.%m')
     next_week_title = next_monday.strftime('%d.%m') + " - " + next_sunday.strftime('%d.%m')
 
-    return render_template('checkin/checkin_main.html', user = current_user, checkins = checkins, keys = keys, page = page, 
+    return render_template('checkin/checkin_main.html', user = current_user, graphs = graphs, keys = keys, page = page, 
     	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title)
 
 

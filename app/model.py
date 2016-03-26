@@ -4,6 +4,8 @@ from . import db, login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 from datetime import datetime, timedelta, date, time as dt_time
+from flask import Markup
+from time import strftime
 
 class Permission:
     CHECKIN = 0x01
@@ -155,15 +157,82 @@ class Checkin(db.Model):
         next_monday = sunday + timedelta(days = 1)
 
         dict = {
-        monday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(monday, tuesday)),
-        tuesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(tuesday, wednesday)),
-        wednesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(wednesday, thursday)),
-        thursday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(thursday, friday)),
-        friday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(friday, saturday)),
-        saturday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(saturday, sunday)),
-        sunday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(sunday, next_monday))
+        monday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(monday, tuesday)).order_by(Checkin.time),
+        tuesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(tuesday, wednesday)).order_by(Checkin.time),
+        wednesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(wednesday, thursday)).order_by(Checkin.time),
+        thursday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(thursday, friday)).order_by(Checkin.time),
+        friday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(friday, saturday)).order_by(Checkin.time),
+        saturday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(saturday, sunday)).order_by(Checkin.time),
+        sunday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(sunday, next_monday)).order_by(Checkin.time)
         }
-        return dict
+
+        html_dict = {
+        monday: Checkin.get_graphics_html(dict[monday], monday.weekday()),
+        tuesday: Checkin.get_graphics_html(dict[tuesday], tuesday.weekday()),
+        wednesday: Checkin.get_graphics_html(dict[wednesday], wednesday.weekday()),
+        thursday: Checkin.get_graphics_html(dict[thursday], thursday.weekday()),
+        friday: Checkin.get_graphics_html(dict[friday], friday.weekday()),
+        saturday: Checkin.get_graphics_html(dict[saturday], saturday.weekday()),
+        sunday: Checkin.get_graphics_html(dict[sunday], sunday.weekday())
+        }
+
+        return html_dict
+
+    @staticmethod
+    def get_graphics_html(checkins, weekday):
+        string = '  <canvas class="box" id="Mycanvas" width="840" height="30" border="6"></canvas>\
+                    <script>\
+                        var canvas = document.getElementById(\'Mycanvas\');\
+                        var holst = canvas.getContext(\'2d\');\
+                        var my_gradient = holst.createLinearGradient(350,0,700,0);\
+                        my_gradient.addColorStop(0,"yellow");\
+                        my_gradient.addColorStop(1,"green");\
+                        holst.fillStyle = my_gradient;\
+                        holst.fillRect(350, 0, 350, 30);\
+                        holst.strokeStyle = "rgb(103, 103, 103)";\
+                        holst.strokeRect(0, 0, 840, 30);\
+                    </script>'
+        result_string = "";
+        if (checkins.count() < 2):
+            if (checkins.count() == 0):
+                result_string = "<p>Empty day</p>"
+            else:
+                #this case will be processed later
+                print("this case will be processed later")
+        else:
+            result_string = '<canvas class="box" id="Mycanvas{}" width="720" height="30" border="6"></canvas>'.format(weekday)
+            result_string += '<script>\
+                                var canvas = document.getElementById(\'Mycanvas{0}\');\
+                                var holst = canvas.getContext(\'2d\');\
+                                holst.strokeStyle = "rgb(103, 103, 103)";\
+                                holst.strokeRect(0, 0, 720, 30);'.format(weekday)
+            i = 0
+            while (i < checkins.count() - 1):
+                first_checkin = checkins[i]
+                second_checkin = checkins[i + 1]
+                minutes_count = float(1440)
+                width = 720
+                begin_minutes = first_checkin.time.hour * 60 + first_checkin.time.minute
+                end_minutes = second_checkin.time.hour * 60 + second_checkin.time.minute
+                x_begin = int(width * (begin_minutes / minutes_count))
+                x_end = int(width * (end_minutes / minutes_count))
+                result_string += 'var my_gradient{0} = holst.createLinearGradient({1},0,{2},0);\
+                                    my_gradient{0}.addColorStop(0,"green");\
+                                    my_gradient{0}.addColorStop(1,"green");\
+                                    holst.fillStyle = my_gradient{0};\
+                                    holst.fillRect({1}, 0, {3}, 30);'.format(i, x_begin, x_end, x_end - x_begin)
+                i = i + 2
+            result_string += '</script>'
+        if (checkins.count() % 2 == 1):
+            if (checkins.count() == 1):
+                result_string += '<p>Only one checkins</p>'
+            else:
+                result_string += '<p>And one more checkins</p>'
+            result_string += '<h4>{0}</h4>'.format((checkins[checkins.count() - 1].time).strftime("%-H:%M:%S"))
+        return Markup(result_string)
+
+
+
 
 
 

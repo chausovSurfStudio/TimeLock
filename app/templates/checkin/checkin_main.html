@@ -15,24 +15,7 @@
 <div>
 	{% for key in keys %}
 		<h3>{{ moment(key).format('MMMM Do YYYY') }}</h3>
-		{% if checkins[key].count() == 0 %}
-			<p>Чекинов нет</p>
-		{% else %}
-			<ul class = "posts">
-			{% for  checkin in checkins[key] %}
-					<li class = "post">
-					    <div class="post-content">
-					    	<div class="post-date">{{ moment(checkin.time).format('MMMM Do YYYY, HH:mm:ss') }}</div>
-					    	<div class="post-author">
-					    		<a href="{{ url_for('main.user', user_id = checkin.user_id) }}">
-					    			{{ user.username }}
-					    		</a>
-					    	</div>
-				    	</div>
-				    </li>
-			{% endfor %}
-			</ul>
-		{% endif %}
+		{{ graphs[key] }}
 	{% endfor %}
 </div>
 
