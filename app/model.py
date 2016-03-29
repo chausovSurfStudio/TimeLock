@@ -206,21 +206,35 @@ class Checkin(db.Model):
                                 var holst = canvas.getContext(\'2d\');\
                                 holst.strokeStyle = "rgb(103, 103, 103)";\
                                 holst.strokeRect(0, 0, 720, 30);'.format(weekday)
+            i = 1
+            minutes_count = float(1440)
+            width = 720
+            while (i < 24):
+                x_offset = int(width * ((i * 60) / minutes_count))
+                y_offset = 24
+                if (i % 6 == 0):
+                    y_offset = 12
+                result_string += 'holst.strokeRect({0}, {1}, 0, {2});'.format(x_offset, y_offset, 30 - y_offset)
+                i += 1
             i = 0
             while (i < checkins.count() - 1):
                 first_checkin = checkins[i]
                 second_checkin = checkins[i + 1]
-                minutes_count = float(1440)
-                width = 720
                 begin_minutes = first_checkin.time.hour * 60 + first_checkin.time.minute
                 end_minutes = second_checkin.time.hour * 60 + second_checkin.time.minute
                 x_begin = int(width * (begin_minutes / minutes_count))
                 x_end = int(width * (end_minutes / minutes_count))
+                begin_color = "green"
+                end_color = "green"
+                if (first_checkin.trustLevel):
+                    begin_color = "yellow"
+                if (second_checkin.trustLevel):
+                    end_color = "yellow"
                 result_string += 'var my_gradient{0} = holst.createLinearGradient({1},0,{2},0);\
-                                    my_gradient{0}.addColorStop(0,"green");\
-                                    my_gradient{0}.addColorStop(1,"green");\
+                                    my_gradient{0}.addColorStop(0,\"{4}\");\
+                                    my_gradient{0}.addColorStop(1,\"{5}\");\
                                     holst.fillStyle = my_gradient{0};\
-                                    holst.fillRect({1}, 0, {3}, 30);'.format(i, x_begin, x_end, x_end - x_begin)
+                                    holst.fillRect({1}, 0, {3}, 30);'.format(i, x_begin, x_end, x_end - x_begin, begin_color, end_color)
                 i = i + 2
             result_string += '</script>'
         if (checkins.count() % 2 == 1):
