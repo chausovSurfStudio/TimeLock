@@ -26,13 +26,13 @@ class CheckinCustomTimeForm(Form):
 			febrary_day = 29
 		self.days_and_month = [('January', 31), ('Febrary', febrary_day), ('March', 31), ('April', 30), ('May', 31), ('June', 30), 
 						('July', 31), ('August', 31), ('September', 30), ('October', 31), ('November', 30), ('December', 31)]
-		i = 0
+		i = 1
 		for item in self.days_and_month:
 			month_choices.append((i, item[0]))
 			i += 1
 		i = 0
 		while current_year - i >= 2015:
-			year_choices.append((i, current_year - i))
+			year_choices.append((current_year - i, current_year - i))
 			i += 1
 		self.month.choices = month_choices
 		self.year.choices = year_choices
@@ -41,7 +41,7 @@ class CheckinCustomTimeForm(Form):
 		if not field.data.isdigit():
 			raise ValidationError('You must input number of day there, not string')
 		digit = int(field.data)
-		day_in_selected_month = self.days_and_month[self.month.data][1]
+		day_in_selected_month = self.days_and_month[self.month.data - 1][1]
 		if digit > day_in_selected_month or digit < 1:
 			raise ValidationError('This day not exists in selected month')
 

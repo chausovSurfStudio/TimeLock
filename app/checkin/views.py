@@ -47,8 +47,12 @@ def checkin_with_current_time():
 def checkin_with_custom_time():
     form  = CheckinCustomTimeForm()
     if form.validate_on_submit():
-        #checkin = Checkin(user_id = currrent_user.id, trustLevel = False)
-        #db.session.add(checkin)
+        time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
+        print(time_string)
+        custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
+        print(custom_date)
+        checkin = Checkin(time = custom_date, user_id = current_user.id, trustLevel = False)
+        db.session.add(checkin)
         return redirect(url_for('checkin.index'))
     current_time = datetime.now()
     print(current_time)
