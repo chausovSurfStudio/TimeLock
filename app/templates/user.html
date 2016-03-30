@@ -40,7 +40,8 @@
 	</div>
 </div>
 
-<canvas class="box" id="Mycanvas" width="840" height="30" border="6"></canvas>
+<canvas class="box" id="Mycanvas" width="840" height="30" border="6" 
+		onmouseover="tooltip(this,'YEAAAHHH')" onmouseout="hide_info(this)"></canvas>
 <script>
 	var canvas = document.getElementById('Mycanvas');
 	var holst = canvas.getContext('2d');
@@ -53,3 +54,4 @@
 	holst.strokeRect(0, 0, 840, 30);
 </script>
 {% endblock %}
+

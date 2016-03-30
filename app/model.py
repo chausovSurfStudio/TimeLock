@@ -180,18 +180,6 @@ class Checkin(db.Model):
 
     @staticmethod
     def get_graphics_html(checkins, weekday):
-        string = '  <canvas class="box" id="Mycanvas" width="840" height="30" border="6"></canvas>\
-                    <script>\
-                        var canvas = document.getElementById(\'Mycanvas\');\
-                        var holst = canvas.getContext(\'2d\');\
-                        var my_gradient = holst.createLinearGradient(350,0,700,0);\
-                        my_gradient.addColorStop(0,"yellow");\
-                        my_gradient.addColorStop(1,"green");\
-                        holst.fillStyle = my_gradient;\
-                        holst.fillRect(350, 0, 350, 30);\
-                        holst.strokeStyle = "rgb(103, 103, 103)";\
-                        holst.strokeRect(0, 0, 840, 30);\
-                    </script>'
         result_string = "";
         if (checkins.count() < 2):
             if (checkins.count() == 0):
@@ -200,7 +188,8 @@ class Checkin(db.Model):
                 #this case will be processed later
                 print("this case will be processed later")
         else:
-            result_string = '<canvas class="box" id="Mycanvas{}" width="720" height="30" border="6"></canvas>'.format(weekday)
+            result_string = '<canvas class="box" id="Mycanvas{}" width="840" height="30" border="6"\
+                            onmouseover="tooltip(this,\'YEAAAHHHH!\')" onmouseout="hide_info(this)"></canvas>'.format(weekday)
             result_string += '<script>\
                                 var canvas = document.getElementById(\'Mycanvas{0}\');\
                                 var holst = canvas.getContext(\'2d\');\

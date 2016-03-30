@@ -96,6 +96,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="hint" id="mess"></div>
 <div class="container">
 	{% for message in get_flashed_messages() %}
 	<div class="alert alert-warning">
@@ -110,4 +111,5 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<script src="{{ url_for('static', filename='floating_hint.js') }}"></script>
 {% endblock %}
