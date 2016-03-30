@@ -5,7 +5,7 @@ from app import db
 from app.model import User, Company, Role, Checkin
 from app.decorators import admin_required, admin_moderator_required
 from app.email import send_email
-from app.checkin.forms import CheckinWithCurrentTimeForm
+from app.checkin.forms import CheckinWithCurrentTimeForm, CheckinCustomTimeForm
 from datetime import datetime, timedelta, date, time as dt_time
 
 
@@ -37,10 +37,23 @@ def index():
 def checkin_with_current_time():
 	form = CheckinWithCurrentTimeForm()
 	if form.validate_on_submit():
-		checkin = Checkin(time = datetime.utcnow(), user_id = current_user.id)
+		checkin = Checkin(time = datetime.utcnow(), user_id = current_user.id, trustLevel = True)
 		db.session.add(checkin)
 		return redirect(url_for('checkin.index'))
 	return render_template('checkin/current_time.html', form = form, current_time = datetime.utcnow())
+
+@checkin.route('/custom_time', methods = ['GET', 'POST'])
+@login_required
+def checkin_with_custom_time():
+    form  = CheckinCustomTimeForm()
+    if form.validate_on_submit():
+        #checkin = Checkin(user_id = currrent_user.id, trustLevel = False)
+        #db.session.add(checkin)
+        return redirect(url_for('checkin.index'))
+    current_time = datetime.now()
+    print(current_time)
+    return render_template('checkin/custom_time.html', form = form)
+
 
 
 
