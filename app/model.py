@@ -188,17 +188,8 @@ class Checkin(db.Model):
                 #this case will be processed later
                 print("this case will be processed later")
         else:
-            hint_string = "<p>"
-            i = 0
-            for checkin in checkins:
-                if (checkins.count() % 2 == 1 and i == checkins.count() - 1):
-                    break
-                hint_string += checkin.time.strftime("%-H:%M:%S") + "<br>"
-                i += 1
-            hint_string = hint_string[:-4]
-            hint_string += "</p>"
-            result_string = '<canvas class="box" id="Mycanvas{0}" width="840" height="30" border="6"\
-                            onmouseover="tooltip(this,\'{1}\')" onmouseout="hide_info(this)"></canvas>'.format(weekday, hint_string)
+            result_string = '<canvas class="box" id="Mycanvas{}" width="720" height="30" border="6"\
+                            onmouseover="tooltip(this)" onmouseout="hide_info(this)"></canvas>'.format(weekday)
             result_string += '<script>\
                                 var canvas = document.getElementById(\'Mycanvas{0}\');\
                                 var holst = canvas.getContext(\'2d\');\

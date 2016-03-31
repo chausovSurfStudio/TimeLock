@@ -3,14 +3,15 @@ var offsetfromcursorY = 15 // y offset of tooltip
 var ie = d.all && !window.opera;
 var ns6 = d.getElementById && !d.all;
 var tipobj, op;
+var canvas;
  
-function tooltip(el,txt) {
+function tooltip(el) {
 	tipobj = d.getElementById('mess');
-	tipobj.innerHTML = txt;
 	op = 0.1;  
 	tipobj.style.opacity = op;
 	tipobj.style.visibility = "visible";
 	el.onmousemove = positiontip;
+	canvas = el;
 	appear();
 }
  
@@ -42,6 +43,21 @@ function positiontip(e) {
 		tipobj.style.top = curY - tipobj.offsetHeight - offsetfromcursorY + "px"
 	else 
 		tipobj.style.top = curY + offsetfromcursorY + "px";
+
+	update_hint_label(curX, curY);
+}
+
+function update_hint_label(currX, currY) {
+	x_offset = currX - canvas.offsetLeft;
+	minutes = 1440;
+	width = canvas.offsetWidth;
+	curr_minute = Math.floor((x_offset / width) * minutes);
+	hours = Math.floor(curr_minute / 60)
+	minutes = curr_minute - hours * 60;
+	if (minutes < 10) {
+		minutes = "0" + minutes;
+	}
+	tipobj.innerHTML = "<p>" + hours + ":" + minutes + "</p>";
 }
  
 function appear() {
