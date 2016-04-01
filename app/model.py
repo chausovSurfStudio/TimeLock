@@ -234,7 +234,7 @@ class Checkin(db.Model):
                 result_string += '<p>Only one checkins in '
             else:
                 result_string += '<p>And one more checkins in '
-            result_string += '{0}</p>'.format((checkins[checkins.count() - 1].time).strftime("%-H:%M:%S"))
+            result_string += '<a class="total-time">{0}</a></p>'.format((checkins[checkins.count() - 1].time).strftime("%-H:%M:%S"))
         return Markup(result_string)
 
 

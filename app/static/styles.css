@@ -55,7 +55,7 @@ div.checkins-graphs {
 }
 
 div.checkins-header { 
-  width: 70%;
+  width: 100%;
   background: transparent;
   color: #494949;
   position: relative;
@@ -65,11 +65,19 @@ div.checkins-total-day {
   width: 70px;
   background: transparent;
   color: #00800d;
-  left: 300px;
-  top: -4px;
+  left: 25%;
+  top: -9px;
   font-size: 18pt;
   font-weight: bold;
   text-align: center;
+  position: absolute;
+}
+
+div.checkins-buttons { 
+  width: 130px;
+  background: transparent;
+  left: 592px;
+  top: -10px;
   position: absolute;
 }
 
@@ -78,3 +86,11 @@ div.checkins-empty-space {
   width: 100%;
   background: transparent;
 }
+
+a.total-time {
+  font-size: 12pt;
+  color: #db0202;
+  font-weight: bold;
+  text-decoration: none;
+}
+

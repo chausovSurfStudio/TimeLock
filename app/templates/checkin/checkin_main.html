@@ -13,6 +13,11 @@
 			<div class="checkins-header">
 				<h4>{{ moment(key).format('MMMM Do YYYY') }}</h4>
 				<div class="checkins-total-day">+25.0</div>
+				<div class="checkins-buttons">
+					<a class="btn btn-success"  href="/"><img src="{{ url_for('static', filename='cross.png') }}" width="14" height="14"></a>
+					<a class="btn btn-warning"  href="/"><img src="{{ url_for('static', filename='draw.png') }}" width="14" height="14"></a>
+					<a class="btn btn-danger"  href="/"><img src="{{ url_for('static', filename='delete.png') }}" width="14" height="14"></a>
+				</div>
 			</div>
 			{{ graphs[key] }}
 		</div>
