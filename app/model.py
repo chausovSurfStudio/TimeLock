@@ -181,6 +181,7 @@ class Checkin(db.Model):
     @staticmethod
     def get_graphics_html(checkins, weekday):
         result_string = "";
+
         if (checkins.count() < 2):
             if (checkins.count() == 0):
                 result_string = "<p>Empty day</p>"
@@ -226,12 +227,14 @@ class Checkin(db.Model):
                                     holst.fillRect({1}, 0, {3}, 30);'.format(i, x_begin, x_end, x_end - x_begin, begin_color, end_color)
                 i = i + 2
             result_string += '</script>'
+            if (checkins.count() % 2 != 1):
+                result_string += "<div class=\"checkins-empty-space\"></div>"
         if (checkins.count() % 2 == 1):
             if (checkins.count() == 1):
-                result_string += '<p>Only one checkins</p>'
+                result_string += '<p>Only one checkins in '
             else:
-                result_string += '<p>And one more checkins</p>'
-            result_string += '<h4>{0}</h4>'.format((checkins[checkins.count() - 1].time).strftime("%-H:%M:%S"))
+                result_string += '<p>And one more checkins in '
+            result_string += '{0}</p>'.format((checkins[checkins.count() - 1].time).strftime("%-H:%M:%S"))
         return Markup(result_string)
 
 
