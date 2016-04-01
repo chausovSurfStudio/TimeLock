@@ -45,3 +45,29 @@ div.hint {
   visibility: hidden;
   position: absolute;
 }
+
+div.checkins-graphs { 
+  width: 100%; 
+  background: #fff;
+  color: black;
+  float: left;
+}
+
+div.checkins-header { 
+  width: 70%;
+  background: transparent;
+  color: #494949;
+  position: relative;
+}
+
+div.checkins-total-day { 
+  width: 70px;
+  background: transparent;
+  color: #00800d;
+  left: 300px;
+  top: -4px;
+  font-size: 18pt;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+}
