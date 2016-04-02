@@ -214,12 +214,12 @@ class Checkin(db.Model):
                 end_minutes = second_checkin.time.hour * 60 + second_checkin.time.minute
                 x_begin = int(width * (begin_minutes / minutes_count))
                 x_end = int(width * (end_minutes / minutes_count))
-                begin_color = "green"
-                end_color = "green"
+                begin_color = "#F3C05E"
+                end_color = "#F3C05E"
                 if (first_checkin.trustLevel):
-                    begin_color = "yellow"
+                    begin_color = "green"
                 if (second_checkin.trustLevel):
-                    end_color = "yellow"
+                    end_color = "green"
                 result_string += 'var my_gradient{0} = holst.createLinearGradient({1},0,{2},0);\
                                     my_gradient{0}.addColorStop(0,\"{4}\");\
                                     my_gradient{0}.addColorStop(1,\"{5}\");\
