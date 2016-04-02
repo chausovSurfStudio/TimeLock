@@ -16,6 +16,7 @@ def index():
     graphs = Checkin.get_checkins_page(page)
     keys = graphs.keys()
     keys.sort()
+    default_date_strings = create_default_strings(keys)
 
     needed_monday = keys[0]
     needed_sunday = needed_monday + timedelta(days = 6)
@@ -29,8 +30,13 @@ def index():
     next_week_title = next_monday.strftime('%d.%m') + " - " + next_sunday.strftime('%d.%m')
 
     return render_template('checkin/checkin_main.html', user = current_user, graphs = graphs, keys = keys, page = page, 
-    	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title)
+    	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, default_date_strings = default_date_strings)
 
+def create_default_strings(dates):
+    dict = {}
+    for date in dates:
+        dict.update({date: date.strftime("%d %m %Y %H:%M")})
+    return dict
 
 @checkin.route('/current_time', methods = ['GET', 'POST'])
 @login_required
