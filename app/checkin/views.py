@@ -35,33 +35,34 @@ def index():
 @checkin.route('/current_time', methods = ['GET', 'POST'])
 @login_required
 def checkin_with_current_time():
-	form = CheckinWithCurrentTimeForm()
-	if form.validate_on_submit():
-		checkin = Checkin(time = datetime.utcnow(), user_id = current_user.id, trustLevel = True)
-		db.session.add(checkin)
-		return redirect(url_for('checkin.index'))
-	return render_template('checkin/current_time.html', form = form, current_time = datetime.utcnow())
+    checkin = Checkin(time = datetime.now(), user_id = current_user.id, trustLevel = True)
+    db.session.add(checkin)
+    flash('Checkin has been created')
+    return redirect(url_for('checkin.index'))
 
-@checkin.route('/custom_time', methods = ['GET', 'POST'])
+@checkin.route('/custom_time/<default_date_string>', methods = ['GET', 'POST'])
 @login_required
-def checkin_with_custom_time():
+def checkin_with_custom_time(default_date_string):
     form  = CheckinCustomTimeForm()
     if form.validate_on_submit():
         time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
-        print(time_string)
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
-        print(custom_date)
         checkin = Checkin(time = custom_date, user_id = current_user.id, trustLevel = False)
         db.session.add(checkin)
         return redirect(url_for('checkin.index'))
-    current_time = datetime.now()
-    print(current_time)
+    default_date = datetime.strptime(default_date_string, "%d %m %Y %H:%M")
+    form.minutes.data = default_date.minute
+    form.hours.data = default_date.hour
+    form.day.data = default_date.day
+    form.year.data = default_date.year
+    form.month.data = default_date.month
     return render_template('checkin/custom_time.html', form = form)
 
 @checkin.route('/checkins_create', methods = ['GET','POST'])
 @login_required
 def checkins_create():
-    return render_template('checkin/checkins_create.html')
+    default_date_string = datetime.now().strftime("%d %m %Y %H:%M")
+    return render_template('checkin/checkins_create.html', default_date_string = default_date_string)
 
 
 
