@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}TimeLock - Custom time{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Изменение выбранного чекина</h1>
+</div>
+<h3>Выбран чекин: {{ selected_date }}</h3>
+<div class="col-md-4">
+	{{ wtf.quick_form(form) }}
+</div>
+
+{% endblock %}

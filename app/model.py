@@ -237,6 +237,11 @@ class Checkin(db.Model):
             result_string += '<a class="total-time">{0}</a></p>'.format((checkins[checkins.count() - 1].time).strftime("%-H:%M:%S"))
         return Markup(result_string)
 
+    @staticmethod
+    def get_checkin_with_time(selected_date, user_id):
+        checkin = Checkin.query.filter_by(time = selected_date, user_id = user_id).first()
+        return checkin
+
 
 
 

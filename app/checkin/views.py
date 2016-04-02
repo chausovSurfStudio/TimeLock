@@ -48,7 +48,10 @@ def get_checkins_for_date(date):
 @checkin.route('/current_time', methods = ['GET', 'POST'])
 @login_required
 def checkin_with_current_time():
-    checkin = Checkin(time = datetime.now(), user_id = current_user.id, trustLevel = True)
+    now = datetime.now()
+    now = now.replace(second = 0, microsecond = 0)
+    print(now)
+    checkin = Checkin(time = now, user_id = current_user.id, trustLevel = True)
     db.session.add(checkin)
     flash('Checkin has been created')
     return redirect(url_for('checkin.index'))
@@ -89,7 +92,30 @@ def edit(date_string):
         dict_is_empty = False
     return render_template('checkin/edit.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty)
 
-
+@checkin.route('/edit/checkin/<date_string>', methods = ['GET', 'POST'])
+@login_required
+def edit_checkin(date_string):
+    form  = CheckinCustomTimeForm()
+    selected_date = datetime.strptime(date_string, "%d %m %Y %H:%M")
+    selected_checkin = Checkin.get_checkin_with_time(selected_date, current_user.id)
+    if not selected_checkin:
+        flash("Not found checkins with selected time")
+        return redirect(url_for('checkin.index'))
+    if form.validate_on_submit():
+        time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
+        custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
+        selected_checkin.time = custom_date
+        selected_checkin.trustLevel = False
+        db.session.add(selected_checkin)
+        flash("Checkin has been updated")
+        return redirect(url_for('checkin.index'))
+    form.minutes.data = selected_date.minute
+    form.hours.data = selected_date.hour
+    form.day.data = selected_date.day
+    form.year.data = selected_date.year
+    form.month.data = selected_date.month
+    selected_date = selected_date.strftime("%A, %d %B %H:%M")
+    return render_template('checkin/edit_checkin.html', form = form, selected_date = selected_date)
 
 
 

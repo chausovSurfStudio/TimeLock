@@ -13,7 +13,7 @@
 		<div class="checkins-edit-record">
 			<h3>{{ key }}</h4=3>
 			<div class="checkins-edit-button">
-				<a class="btn btn-warning"  href="{{ url_for('checkin.edit', date_string = checkins[key]) }}">
+				<a class="btn btn-warning"  href="{{ url_for('checkin.edit_checkin', date_string = checkins[key]) }}">
 					<img src="{{ url_for('static', filename='draw.png') }}" width="14" height="14">
 				</a>
 			</div>
