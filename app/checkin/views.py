@@ -38,6 +38,13 @@ def create_default_strings(dates):
         dict.update({date: date.strftime("%d %m %Y %H:%M")})
     return dict
 
+def get_checkins_for_date(date):
+    checkins = Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(date, date + timedelta(days = 1))).order_by(Checkin.time)
+    checkins_dict = {}
+    for checkin in checkins:
+        checkins_dict.update({checkin.time.strftime("%A, %d %B %H:%M"): checkin.time.strftime("%d %m %Y %H:%M")})
+    return checkins_dict
+
 @checkin.route('/current_time', methods = ['GET', 'POST'])
 @login_required
 def checkin_with_current_time():
@@ -69,6 +76,18 @@ def checkin_with_custom_time(default_date_string):
 def checkins_create():
     default_date_string = datetime.now().strftime("%d %m %Y %H:%M")
     return render_template('checkin/checkins_create.html', default_date_string = default_date_string)
+
+@checkin.route('/edit/<date_string>', methods = ['GET', 'POST'])
+@login_required
+def edit(date_string):
+    date = datetime.strptime(date_string, "%d %m %Y %H:%M")
+    checkins_dict = get_checkins_for_date(date)
+    keys = checkins_dict.keys()
+    keys.sort()
+    dict_is_empty = True
+    if any(checkins_dict):
+        dict_is_empty = False
+    return render_template('checkin/edit.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty)
 
 
 
