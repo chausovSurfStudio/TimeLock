@@ -117,6 +117,30 @@ def edit_checkin(date_string):
     selected_date = selected_date.strftime("%A, %d %B %H:%M")
     return render_template('checkin/edit_checkin.html', form = form, selected_date = selected_date)
 
+@checkin.route('/delete/<date_string>', methods = ['GET', 'POST'])
+@login_required
+def delete(date_string):
+    date = datetime.strptime(date_string, "%d %m %Y %H:%M")
+    checkins_dict = get_checkins_for_date(date)
+    keys = checkins_dict.keys()
+    keys.sort()
+    dict_is_empty = True
+    if any(checkins_dict):
+        dict_is_empty = False
+    return render_template('checkin/delete.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty)
+
+@checkin.route('/delete/checkin/<date_string>')
+@login_required
+def delete_checkin(date_string):
+    selected_date = datetime.strptime(date_string, "%d %m %Y %H:%M")
+    selected_checkin = Checkin.get_checkin_with_time(selected_date, current_user.id)
+    if not selected_checkin:
+        flash("Not found checkins with selected time")
+        return redirect(url_for('checkin.index'))
+    else:
+        db.session.delete(selected_checkin)
+        flash('Selected checkin has been removed')
+    return redirect(url_for('checkin.index'))
 
 
 

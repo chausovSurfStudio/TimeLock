@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}TimeLock - Delete checkin{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Удалите неверный чекин</h1>
+</div>
+
+<div>
+	{% for key in keys %}
+		<div class="checkins-edit-record">
+			<h3>{{ key }}</h3>
+			<div class="checkins-edit-button">
+				<a class="btn btn-danger"  href="{{ url_for('checkin.delete_checkin', date_string = checkins[key]) }}">
+					<img src="{{ url_for('static', filename='delete.png') }}" width="14" height="14">
+				</a>
+			</div>
+		</div>
+	{% endfor %}
+	{% if dict_is_empty %}
+		<h3>Нечего удалять =(</h3>
+	{% endif %}
+</div>
+
+{% endblock %}
