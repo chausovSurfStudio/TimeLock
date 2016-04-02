@@ -58,6 +58,10 @@ def checkin_with_custom_time():
     print(current_time)
     return render_template('checkin/custom_time.html', form = form)
 
+@checkin.route('/checkins_create', methods = ['GET','POST'])
+@login_required
+def checkins_create():
+    return render_template('checkin/checkins_create.html')
 
 
 

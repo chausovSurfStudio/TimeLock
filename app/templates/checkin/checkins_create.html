@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}TimeLock - Checkin{% endblock %}
+
+{% block page_content %}
+<script type="text/javascript">
+function getDate() {
+    var date = new Date();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    //По надобности условие ниже повторить с minutes и hours
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+    if (minutes < 10) {
+    	minutes = '0' + minutes;
+    }
+    document.getElementById('timedisplay').innerHTML = 'Текущее время: ' + hours + ':' + minutes + ':' + seconds;
+    document.getElementById('timedisplay').style.margin = 50;
+}
+
+setInterval(getDate, 100);
+</script>
+
+
+<div class="page-header">
+	<div class="checkins-header">
+		<div class="timedisplay" id="timedisplay"></div>
+		<div class="checkins-create-button">
+			<a class="btn btn-success btn-block" href="{{ url_for('checkin.checkin_with_current_time') }}">
+				Чекин с текущим временем
+			</a>
+		</div>
+	</div>
+	<br>
+	<div class="checkins-create-button">
+		<a class="btn btn-danger btn-block" href="{{ url_for('checkin.checkin_with_custom_time') }}">
+			Чекин с произвольным временем
+		</a>
+	</div>
+</div>
+{% endblock %}

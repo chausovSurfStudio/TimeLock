@@ -26,7 +26,7 @@
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Чекины <b class="caret"></b>
 	                    </a>
 	                    <ul class="dropdown-menu">
-	                        <li><a href="/">Зачекиниться</a></li>
+	                        <li><a href="{{ url_for('checkin.checkins_create') }}">Зачекиниться</a></li>
 	                        <li><a href="{{ url_for('checkin.index') }}">Просмотреть таблицу посещаемости</a></li>
 	                    </ul>
                 	</li>

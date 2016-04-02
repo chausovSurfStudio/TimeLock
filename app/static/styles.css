@@ -94,3 +94,16 @@ a.total-time {
   text-decoration: none;
 }
 
+div.timedisplay { 
+  width: 20%;
+  background: transparent;
+  color: #494949;
+  left: 27%;
+  top: 8px;
+  position: absolute;
+}
+
+div.checkins-create-button {
+  width: 25%;
+  background: transparent;
+}
