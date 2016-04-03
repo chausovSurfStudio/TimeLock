@@ -189,13 +189,14 @@ class Checkin(db.Model):
                 #this case will be processed later
                 print("this case will be processed later")
         else:
-            result_string = '<canvas class="box" id="Mycanvas{}" width="720" height="30" border="6"\
+            result_string = '<canvas class="box" id="Mycanvas{}" width="720" height="40" border="6"\
                             onmouseover="tooltip(this)" onmouseout="hide_info(this)"></canvas>'.format(weekday)
             result_string += '<script>\
                                 var canvas = document.getElementById(\'Mycanvas{0}\');\
                                 var holst = canvas.getContext(\'2d\');\
                                 holst.strokeStyle = "rgb(103, 103, 103)";\
                                 holst.strokeRect(0, 0, 720, 30);'.format(weekday)
+            #add marking to graphics
             i = 1
             minutes_count = float(1440)
             width = 720
@@ -206,6 +207,16 @@ class Checkin(db.Model):
                     y_offset = 12
                 result_string += 'holst.strokeRect({0}, {1}, 0, {2});'.format(x_offset, y_offset, 30 - y_offset)
                 i += 1
+            #add labels with time
+            i = 3
+            while (i <= 21):
+                x_offset = int(width * ((i * 60) / minutes_count))
+                y_offset = 30
+                time = "{0}:00".format(i)
+                result_string += 'holst.textAlign = "center";\
+                                holst.textBaseline = "top";\
+                                holst.fillText("{0}", {1}, {2});'.format(time, x_offset, y_offset)
+                i += 3
             i = 0
             while (i < checkins.count() - 1):
                 first_checkin = checkins[i]
