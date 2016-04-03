@@ -31,7 +31,8 @@ def index():
     next_week_title = next_monday.strftime('%d.%m') + " - " + next_sunday.strftime('%d.%m')
 
     return render_template('checkin/checkin_main.html', user = current_user, graphs = graphs, keys = keys, page = page, 
-    	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, default_date_strings = default_date_strings)
+    	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, 
+        default_date_strings = default_date_strings, week_total = graphs_and_time[1])
 
 def create_default_strings(dates):
     dict = {}

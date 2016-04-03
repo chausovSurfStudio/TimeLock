@@ -3,8 +3,9 @@
 {% block title %}TimeLock - Checkin{% endblock %}
 
 {% block page_content %}
-<div class = "pagination">
+<div class = "pagination_my">
 	{% include '_pagination_checkin.html' %}
+	<div class="checkins-total-week">Итог за неделю - {{ week_total }}</div>
 </div>
 
 <div>
@@ -28,5 +29,6 @@
 			{{ graphs[key][0] }}
 		</div>
 	{% endfor %}
+
 </div>
 {% endblock %}
