@@ -6,6 +6,7 @@ from flask import current_app, request
 from datetime import datetime, timedelta, date, time as dt_time
 from flask import Markup
 from time import strftime
+import hashlib
 
 class Permission:
     CHECKIN = 0x01
@@ -57,6 +58,7 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(64))
     member_since = db.Column(db.DateTime(), default = datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
+    avatar_hash = db.Column(db.String(32))
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -65,6 +67,8 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(permissions = 0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(permissions = 0x07).first()
+        if self.email is not None and self.avatar_hash is None:
+            self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
 
     @property
     def password(self):
@@ -76,9 +80,6 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def __rept__(self):
-        return '<User %r' % self.username
 
     def generate_confirmation_token(self, expiration = 3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
@@ -111,6 +112,14 @@ class User(UserMixin, db.Model):
 
     def password_is_empty(self):
         return not self.password_hash
+
+    def gravatar(self, size = 100, default = 'identicon', rating ='g'):
+        if request.is_secure:
+            url = 'https://secure.gravatar.com/avatar'
+        else:
+            url = 'http://www.gravatar.com/avatar'
+        hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url = url, hash = hash, size = size, default = default, rating = rating)
 
     def __repr__(self):
         return '<User %r>' % self.username

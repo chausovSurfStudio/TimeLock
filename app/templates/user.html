@@ -4,6 +4,7 @@
 
 {% block page_content %}
 <div class="page-header">
+	<img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
     <div class="profile-header">
     	{% if user.username %}
     		<h1>{{ user.username }}</h1>
@@ -39,19 +40,5 @@
 
 	</div>
 </div>
-
-<canvas class="box" id="Mycanvas" width="840" height="30" border="6" 
-		onmouseover="tooltip(this,'YEAAAHHH')" onmouseout="hide_info(this)"></canvas>
-<script>
-	var canvas = document.getElementById('Mycanvas');
-	var holst = canvas.getContext('2d');
-	var my_gradient = holst.createLinearGradient(350,0,700,0);
-	my_gradient.addColorStop(0,"yellow");
-	my_gradient.addColorStop(1,"green");
-	holst.fillStyle = my_gradient;  
-	holst.fillRect(350, 0, 350, 30);  
-	holst.strokeStyle = "rgb(103, 103, 103)";
-	holst.strokeRect(0, 0, 840, 30);
-</script>
 {% endblock %}
 

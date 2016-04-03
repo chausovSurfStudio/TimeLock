@@ -74,13 +74,16 @@
 					<li class="dropdown">
 	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Профиль <b class="caret"></b>
 	                    </a>
+
 	                    <ul class="dropdown-menu">
 	                        <li><a href="{{ url_for('main.user', user_id=current_user.id) }}">Просмотреть свой профиль</a></li>
 	                        <li><a href="{{ url_for('main.edit_profile') }}">Изменить данные о себе</a></li>
 	                    </ul>
                 	</li>
 	    			<li class="dropdown">
-	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Аккаунт <b class="caret"></b>
+	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	                    	<img src="{{ current_user.gravatar(size=18) }}">
+	                    	{{ current_user.username }} <b class="caret"></b>
 	                    </a>
 	                    <ul class="dropdown-menu">
 	                        <li><a href="{{ url_for('auth.change_password') }}">Изменить пароль</a></li>

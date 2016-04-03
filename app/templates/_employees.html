@@ -1,6 +1,11 @@
 <ul class = "posts">
     {% for user in company.users %}
     <li class = "post">
+        <div class = "profile-thumbnail">
+            <a href="{{ url_for('main.user', user_id = user.id) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size = 40) }}">
+            </a>
+        </div>
 	    <div class="post-content">
 	    	<div class="post-date">{{ moment(user.member_since).fromNow() }}</div>
 	    	<div class="post-author">
