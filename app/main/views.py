@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, date, time as dt_time
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
-    return render_template('index.html')
+	return render_template('index.html')
 
 @main.route('/new_company', methods = ['GET', 'POST'])
 @admin_required

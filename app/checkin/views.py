@@ -13,7 +13,8 @@ from datetime import datetime, timedelta, date, time as dt_time
 @login_required
 def index():
     page = request.args.get('page', 1, type = int)
-    graphs = Checkin.get_checkins_page(page)
+    graphs_and_time = Checkin.get_checkins_page(page)
+    graphs = graphs_and_time[0]
     keys = graphs.keys()
     keys.sort()
     default_date_strings = create_default_strings(keys)

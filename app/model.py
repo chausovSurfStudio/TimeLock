@@ -166,17 +166,47 @@ class Checkin(db.Model):
         sunday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(sunday, next_monday)).order_by(Checkin.time)
         }
 
-        html_dict = {
-        monday: Checkin.get_graphics_html(dict[monday], monday.weekday()),
-        tuesday: Checkin.get_graphics_html(dict[tuesday], tuesday.weekday()),
-        wednesday: Checkin.get_graphics_html(dict[wednesday], wednesday.weekday()),
-        thursday: Checkin.get_graphics_html(dict[thursday], thursday.weekday()),
-        friday: Checkin.get_graphics_html(dict[friday], friday.weekday()),
-        saturday: Checkin.get_graphics_html(dict[saturday], saturday.weekday()),
-        sunday: Checkin.get_graphics_html(dict[sunday], sunday.weekday())
+        work_time_list = [
+        Checkin.get_work_time_for_checkins(dict[monday]),
+        Checkin.get_work_time_for_checkins(dict[tuesday]),
+        Checkin.get_work_time_for_checkins(dict[wednesday]),
+        Checkin.get_work_time_for_checkins(dict[thursday]),
+        Checkin.get_work_time_for_checkins(dict[friday]),
+        Checkin.get_work_time_for_checkins(dict[saturday]),
+        Checkin.get_work_time_for_checkins(dict[sunday])
+        ]
+        
+        week_time = 0
+        for minutes in work_time_list:
+            week_time += minutes
+        week_time_hours = week_time // 60
+        week_time_minutes = week_time % 60
+        format_string = "{0}:{1}"
+        if (week_time_minutes < 10):
+            format_string = "{0}:0{1}"
+        week_time_string = format_string.format(week_time_hours, week_time_minutes)
+
+        work_time_formats = []
+        for minutes in work_time_list:
+            total_hours = minutes // 60
+            total_minutes = minutes % 60
+            format_string = "{0}:{1}"
+            if (total_minutes < 10):
+                format_string = "{0}:0{1}"
+            total_string = format_string.format(total_hours, total_minutes)
+            work_time_formats.append(total_string)
+
+        result_dict = {
+        monday: [Checkin.get_graphics_html(dict[monday], monday.weekday()), work_time_formats[0]],
+        tuesday: [Checkin.get_graphics_html(dict[tuesday], tuesday.weekday()), work_time_formats[1]],
+        wednesday: [Checkin.get_graphics_html(dict[wednesday], wednesday.weekday()), work_time_formats[2]],
+        thursday: [Checkin.get_graphics_html(dict[thursday], thursday.weekday()), work_time_formats[3]],
+        friday: [Checkin.get_graphics_html(dict[friday], friday.weekday()), work_time_formats[4]],
+        saturday: [Checkin.get_graphics_html(dict[saturday], saturday.weekday()), work_time_formats[5]],
+        sunday: [Checkin.get_graphics_html(dict[sunday], sunday.weekday()), work_time_formats[6]] 
         }
 
-        return html_dict
+        return result_dict, week_time_string
 
     @staticmethod
     def get_graphics_html(checkins, weekday):
@@ -253,9 +283,16 @@ class Checkin(db.Model):
         checkin = Checkin.query.filter_by(time = selected_date, user_id = user_id).first()
         return checkin
 
-
-
-
+    @staticmethod
+    def get_work_time_for_checkins(checkins):
+        i = 0
+        delta = 0
+        while (i < checkins.count() - 1):
+            first_checkin = checkins[i]
+            second_checkin = checkins[i + 1]
+            delta += (second_checkin.time - first_checkin.time).seconds // 60
+            i +=2
+        return delta
 
 
 
