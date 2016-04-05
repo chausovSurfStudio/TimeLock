@@ -45,14 +45,14 @@ div.checkins-total-day {
 }
 
 div.checkins-total-week { 
-  width: 100%;
+  width: 30%;
   background: transparent;
-  left: 510px;
-  top: -60px;
+  right: 0%;
+  top: 92px;
   font-size: 18pt;
   font-weight: bold;
   text-align: left;
-  position: relative;
+  position: absolute;
 }
 
 div.checkins-buttons { 
