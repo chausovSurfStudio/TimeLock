@@ -13,11 +13,15 @@ div.hint {
   position: absolute;
 }
 
+div.checkins-table {
+  width: 100%;
+}
+
 div.checkins-graphs { 
-  width: 100%; 
+  width: 722px; 
   background: #fff;
   color: black;
-  float: left;
+  margin: auto;
 }
 
 div.checkins-header { 
@@ -43,7 +47,7 @@ div.checkins-total-day {
 div.checkins-total-week { 
   width: 100%;
   background: transparent;
-  left: 680px;
+  left: 510px;
   top: -60px;
   font-size: 18pt;
   font-weight: bold;
@@ -54,7 +58,7 @@ div.checkins-total-week {
 div.checkins-buttons { 
   width: 130px;
   background: transparent;
-  left: 592px;
+  right: 0px;
   top: -10px;
   position: absolute;
 }
