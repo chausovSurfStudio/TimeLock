@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
-from app.model import User, Company, Role
+from app.model import User, Company, Role, Checkin
 from app.decorators import admin_required, admin_moderator_required
 from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm
 from app.email import send_email
@@ -159,7 +159,10 @@ def edit_profile_admin(id):
 @login_required
 def my_company():
 	company = current_user.company;
-	return render_template('company.html', company = company)
+	times_dict = {}
+	for employee in company.users:
+		times_dict[employee.id] = Checkin.get_work_time_in_four_last_week(employee.id)
+	return render_template('company.html', company = company, times_dict = times_dict)
 
 @main.route('/company/<company_name>', methods = ['GET'])
 @admin_required

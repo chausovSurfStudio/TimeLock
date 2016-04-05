@@ -7,7 +7,12 @@
             </a>
         </div>
 	    <div class="post-content">
-	    	<div class="post-date">{{ moment(user.member_since).fromNow() }}</div>
+            <div class="work-times">
+                <div class="work-times1">{{ times_dict[user.id][0] }}</div>
+                <div class="work-times2">{{ times_dict[user.id][1] }}</div>
+                <div class="work-times3">{{ times_dict[user.id][2] }}</div>
+                <div class="work-times4">{{ times_dict[user.id][3] }}</div>
+            </div>
 	    	<div class="post-author">
 	    		<a href="{{ url_for('main.user', user_id = user.id) }}">
 	    			{{ user.username }}
@@ -21,7 +26,9 @@
                     {% if user.middle_name %}{{ user.middle_name }}{% endif %}
                 </p>
                 {% endif %}
+                <p>Ставка = 40 часов</p>
             </div>
+
     	</div>
     </li>
     {% endfor %}

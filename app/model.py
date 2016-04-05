@@ -303,5 +303,38 @@ class Checkin(db.Model):
             i +=2
         return delta
 
+    @staticmethod
+    def get_work_time_in_four_last_week(user_id):
+        times = []
+        for week in [1, 2, 3, 4]:
+            times.append(Checkin.get_total_time_in_week(week, user_id))
+        time_string = []
+        for value in times:
+            hours = value // 60
+            minutes = value % 60
+            if minutes < 10:
+                minutes = "0{}".format(minutes)
+            time_string.append("{}:{}".format(hours, minutes))
+        return time_string;
+
+    @staticmethod
+    def get_total_time_in_week(week, user_id):
+        current_day = datetime.now().date()
+        delta = timedelta(days = current_day.weekday() + 7 * (week - 1))
+
+        begin_day = current_day - delta
+        i = 0
+        time = 0
+        while i < 7:
+            end_day = begin_day + timedelta(days = 1)
+            checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(begin_day, end_day)).order_by(Checkin.time)
+            time += Checkin.get_work_time_for_checkins(checkins)
+            begin_day = end_day
+            i += 1
+        print("time = ", time, "week = ", week, "user_id = ", user_id)
+        return time
+
+
+
 
 
