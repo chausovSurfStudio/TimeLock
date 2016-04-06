@@ -53,7 +53,7 @@ div.work-times1 {
     font-size: 17pt;
     font-weight: bold;
     letter-spacing: 2px;
-    color: #00800d;
+    color: #424242;
     font-family: Helvetica;
 }
 div.work-times2 {
@@ -66,7 +66,7 @@ div.work-times2 {
     font-size: 17pt;
     font-weight: bold;
     letter-spacing: 2px;
-    color: #00800d;
+    color: #424242;
     font-family: Helvetica;
 }
 div.work-times3 {
@@ -79,7 +79,7 @@ div.work-times3 {
     font-size: 17pt;
     font-weight: bold;
     letter-spacing: 2px;
-    color: #00800d;
+    color: #424242;
     font-family: Helvetica;
 }
 div.work-times4 {
@@ -92,8 +92,16 @@ div.work-times4 {
     font-size: 17pt;
     font-weight: bold;
     letter-spacing: 2px;
-    color: #00800d;
+    color: #424242;
     font-family: Helvetica;
+}
+
+span.good-work {
+    color: green;
+}
+
+span.bad-work {
+    color: red;
 }
 
 

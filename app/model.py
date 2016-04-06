@@ -316,7 +316,7 @@ class Checkin(db.Model):
             if minutes < 10:
                 minutes = "0{}".format(minutes)
             time_string.append("{}:{}".format(hours, minutes))
-        return time_string;
+        return time_string, times;
 
     @staticmethod
     def get_total_time_in_week(week, user_id):
@@ -332,7 +332,6 @@ class Checkin(db.Model):
             time += Checkin.get_work_time_for_checkins(checkins)
             begin_day = end_day
             i += 1
-        print("time = ", time, "week = ", week, "user_id = ", user_id)
         return time
 
 

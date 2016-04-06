@@ -162,7 +162,26 @@ def my_company():
 	times_dict = {}
 	for employee in company.users:
 		times_dict[employee.id] = Checkin.get_work_time_in_four_last_week(employee.id)
-	return render_template('company.html', company = company, times_dict = times_dict)
+	delta_dict = {}
+	for employee in company.users:
+		delta_array = []
+		rate_minutes = employee.rate * 60
+		for value in times_dict[employee.id][1]:
+			delta = rate_minutes - value
+			good_work = delta < 0
+			if good_work:
+				delta *= -1
+				sign = "+"
+			else:
+				sign = "-"
+			delta_hours = delta // 60
+			delta_minutes = delta % 60
+			if delta_minutes < 10:
+				delta_minutes = "0{}".format(delta_minutes)
+			delta_string = "({}{}:{})".format(sign, delta_hours, delta_minutes)
+			delta_array.append([delta_string, good_work])
+		delta_dict[employee.id] = delta_array
+	return render_template('company.html', company = company, times_dict = times_dict, delta_dict = delta_dict)
 
 @main.route('/company/<company_name>', methods = ['GET'])
 @admin_required

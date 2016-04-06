@@ -8,10 +8,42 @@
         </div>
 	    <div class="post-content">
             <div class="work-times">
-                <div class="work-times1">{{ times_dict[user.id][0] }}</div>
-                <div class="work-times2">{{ times_dict[user.id][1] }}</div>
-                <div class="work-times3">{{ times_dict[user.id][2] }}</div>
-                <div class="work-times4">{{ times_dict[user.id][3] }}</div>
+                <div class="work-times1">{{ times_dict[user.id][0][0] }} 
+                    {% if delta_dict[user.id][0][1] %}
+                        <span class="good-work">
+                    {% else %}
+                        <span class="bad-work">
+                    {% endif %}
+                    {{ delta_dict[user.id][0][0] }}
+                    </span>
+                </div>
+                <div class="work-times2">{{ times_dict[user.id][0][1] }} 
+                    {% if delta_dict[user.id][1][1] %}
+                        <span class="good-work">
+                    {% else %}
+                        <span class="bad-work">
+                    {% endif %}
+                    {{ delta_dict[user.id][1][0] }}
+                    </span>
+                </div>
+                <div class="work-times3">{{ times_dict[user.id][0][2] }} 
+                    {% if delta_dict[user.id][2][1] %}
+                        <span class="good-work">
+                    {% else %}
+                        <span class="bad-work">
+                    {% endif %}
+                    {{ delta_dict[user.id][2][0] }}
+                    </span>
+                </div>
+                <div class="work-times4">{{ times_dict[user.id][0][3] }} 
+                    {% if delta_dict[user.id][3][1] %}
+                        <span class="good-work">
+                    {% else %}
+                        <span class="bad-work">
+                    {% endif %}
+                    {{ delta_dict[user.id][3][0] }}
+                    </span>
+                </div>
             </div>
 	    	<div class="post-author">
 	    		<a href="{{ url_for('main.user', user_id = user.id) }}">
