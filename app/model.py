@@ -52,6 +52,7 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     checkins = db.relationship('Checkin', backref = 'user', lazy = 'dynamic')
+    rate = db.Column(db.Integer, default = 40)
     #other info
     first_name = db.Column(db.String(64))
     middle_name = db.Column(db.String(64))
