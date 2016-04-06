@@ -5,7 +5,12 @@
 {% block page_content %}
 <div class = "pagination_my">
 	{% include '_pagination_checkin.html' %}
-	<div class="checkins-total-week">Итог за неделю - {{ week_total }}</div>
+	<div class="checkins-total-week">
+		Итог за неделю - {{ week_total }}
+		 <span {% if negative_delta %}class="total-delta-negative"{% else %}class="total-delta-positive"{% endif %}>
+			({% if negative_delta %}-{% else %}+{% endif %}{{ delta }})
+		</span>
+	</div>
 </div>
 
 <div class="checkins-table">

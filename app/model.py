@@ -216,7 +216,7 @@ class Checkin(db.Model):
         sunday: [Checkin.get_graphics_html(dict[sunday], sunday.weekday()), work_time_formats[6]] 
         }
 
-        return result_dict, week_time_string
+        return result_dict, week_time_string, week_time
 
     @staticmethod
     def get_graphics_html(checkins, weekday):

@@ -30,9 +30,21 @@ def index():
     prev_week_title = prev_monday.strftime('%d.%m') + " - " + prev_sunday.strftime('%d.%m')
     next_week_title = next_monday.strftime('%d.%m') + " - " + next_sunday.strftime('%d.%m')
 
+    delta = current_user.rate * 60 - graphs_and_time[2]
+    bad_work = delta > 0
+    if not bad_work:
+        delta *= -1
+    delta_hours = delta // 60
+    delta_minutes = delta % 60
+    if delta_minutes < 10:
+        delta_minutes = "0{}".format(delta_minutes)
+    delta_string = "{}:{}".format(delta_hours, delta_minutes)
+
+
     return render_template('checkin/checkin_main.html', user = current_user, graphs = graphs, keys = keys, page = page, 
     	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, 
-        default_date_strings = default_date_strings, week_total = graphs_and_time[1])
+        default_date_strings = default_date_strings, week_total = graphs_and_time[1],
+        delta = delta_string, negative_delta = bad_work)
 
 def create_default_strings(dates):
     dict = {}

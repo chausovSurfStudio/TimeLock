@@ -55,6 +55,14 @@ div.checkins-total-week {
   position: absolute;
 }
 
+span.total-delta-negative {
+    color: red;
+}
+
+span.total-delta-positive {
+    color: green;
+}
+
 div.checkins-buttons { 
   width: 130px;
   background: transparent;
