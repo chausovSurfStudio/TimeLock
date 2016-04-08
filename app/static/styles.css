@@ -38,58 +38,58 @@ div.post-content {
 }
 div.work-times {
     float: right;
-    width: 600px;
+    width: 680px;
     height: 45px;
     position: relative;
 }
 
 div.work-times1 {
-    width: 150px;
+    width: 170px;
     height: 100%;
     left: 0px;
     position: absolute;
     text-align: center;
     line-height: 40pt;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: bold;
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
 }
 div.work-times2 {
-    width: 150px;
+    width: 170px;
     height: 100%;
-    left: 150px;
+    left: 170px;
     position: absolute;
     text-align: center;
     line-height: 40pt;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: bold;
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
 }
 div.work-times3 {
-    width: 150px;
+    width: 170px;
     height: 100%;
-    left: 300px;
+    left: 340px;
     position: absolute;
     text-align: center;
     line-height: 40pt;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: bold;
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
 }
 div.work-times4 {
-    width: 150px;
+    width: 170px;
     height: 100%;
-    left: 450px;
+    left: 510px;
     position: absolute;
     text-align: center;
     line-height: 40pt;
-    font-size: 17pt;
+    font-size: 14pt;
     font-weight: bold;
     letter-spacing: 2px;
     color: #424242;
@@ -98,10 +98,14 @@ div.work-times4 {
 
 span.good-work {
     color: green;
+    font-size: 16pt;
+    letter-spacing: 1px;
 }
 
 span.bad-work {
     color: red;
+    font-size: 16pt;
+    letter-spacing: 1px;
 }
 
 
