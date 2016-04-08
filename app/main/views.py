@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
@@ -92,19 +92,49 @@ def set_password(email, company_name):
 @login_required
 def user(user_id):
     user = User.query.filter_by(id = user_id).first_or_404()
-    
-    print(user.member_since.strftime('%y-%m-%d %H:%M:%S'))
-    d = user.member_since.date()
+    if current_user.is_moderator():
+	    page = request.args.get('page', 1, type = int)
+	    graphs_and_time = Checkin.get_checkins_page(page, user_id)
+	    graphs = graphs_and_time[0]
+	    keys = graphs.keys()
+	    keys.sort()
+	    default_date_strings = create_default_strings(keys)
 
-    delta = timedelta(days = d.weekday() + 7)
-    lm = d - delta
-    print("last monday = ", lm.strftime('%y-%m-%d %H:%M:%S'))
-    delta = timedelta(days = 7 - d.weekday())
-    nm = d + delta
+	    needed_monday = keys[0]
+	    needed_sunday = needed_monday + timedelta(days = 6)
+	    prev_monday = needed_monday - timedelta(days = 7)
+	    prev_sunday = needed_sunday - timedelta(days = 7)
+	    next_monday = needed_monday + timedelta(days = 7)
+	    next_sunday = needed_sunday + timedelta(days = 7)
 
-    print("next monday", nm.strftime('%y-%m-%d %H:%M:%S'))
+	    need_week_title = needed_monday.strftime('%d.%m') + " - " + needed_sunday.strftime('%d.%m')
+	    prev_week_title = prev_monday.strftime('%d.%m') + " - " + prev_sunday.strftime('%d.%m')
+	    next_week_title = next_monday.strftime('%d.%m') + " - " + next_sunday.strftime('%d.%m')
 
-    return render_template('user.html', user=user)
+	    delta = user.rate * 60 - graphs_and_time[2]
+	    bad_work = delta > 0
+	    if not bad_work:
+	        delta *= -1
+	    delta_hours = delta // 60
+	    delta_minutes = delta % 60
+	    if delta_minutes < 10:
+	        delta_minutes = "0{}".format(delta_minutes)
+	    delta_string = "{}:{}".format(delta_hours, delta_minutes)
+
+	    pagination_url = "/user/{}?page=".format(user.id)
+	    print("pagination_url = ", pagination_url)
+
+	    return render_template('user.html', user = user, graphs = graphs, keys = keys, page = page, 
+	    	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, 
+	        default_date_strings = default_date_strings, week_total = graphs_and_time[1],
+	        delta = delta_string, negative_delta = bad_work, pagination_url = pagination_url)
+    return render_template('user.html', user = user)
+
+def create_default_strings(dates):
+    dict = {}
+    for date in dates:
+        dict.update({date: date.strftime("%d %m %Y %H:%M")})
+    return dict
 
 @main.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required

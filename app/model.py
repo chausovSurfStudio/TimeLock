@@ -153,7 +153,7 @@ class Checkin(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     @staticmethod
-    def get_checkins_page(page):
+    def get_checkins_page(page, user_id):
         current_day = datetime.now().date()
         delta = timedelta(days = current_day.weekday() + 7 * (page - 1))
 
@@ -167,13 +167,13 @@ class Checkin(db.Model):
         next_monday = sunday + timedelta(days = 1)
 
         dict = {
-        monday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(monday, tuesday)).order_by(Checkin.time),
-        tuesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(tuesday, wednesday)).order_by(Checkin.time),
-        wednesday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(wednesday, thursday)).order_by(Checkin.time),
-        thursday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(thursday, friday)).order_by(Checkin.time),
-        friday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(friday, saturday)).order_by(Checkin.time),
-        saturday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(saturday, sunday)).order_by(Checkin.time),
-        sunday: Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(sunday, next_monday)).order_by(Checkin.time)
+        monday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(monday, tuesday)).order_by(Checkin.time),
+        tuesday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(tuesday, wednesday)).order_by(Checkin.time),
+        wednesday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(wednesday, thursday)).order_by(Checkin.time),
+        thursday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(thursday, friday)).order_by(Checkin.time),
+        friday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(friday, saturday)).order_by(Checkin.time),
+        saturday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(saturday, sunday)).order_by(Checkin.time),
+        sunday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(sunday, next_monday)).order_by(Checkin.time)
         }
 
         work_time_list = [

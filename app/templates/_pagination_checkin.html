@@ -7,7 +7,7 @@
 		</li>
 	{% else %}
 		<li>
-			<a href="{{ url_for('checkin.index', page = page - 1) }}">&laquo;</a>
+			<a href="{{ '{}{}'.format(pagination_url, page - 1) }}">&laquo;</a>
 		</li>
 	{% endif %}
 
@@ -16,14 +16,14 @@
 	{% endif %}
 
 	{% if page == 1 %}
-		<li class = "active"><a href="{{ url_for('checkin.index', page = page) }}">{{ need_title }}</a></li>
-		<li><a href="{{ url_for('checkin.index', page = page + 1) }}">{{ prev_title }}</a></li>
+		<li class = "active"><a href="{{ '{}{}'.format(pagination_url, page) }}">{{ need_title }}</a></li>
+		<li><a href="{{ '{}{}'.format(pagination_url, page + 1) }}">{{ prev_title }}</a></li>
 	{% else %}
-		<li><a href="{{ url_for('checkin.index', page = page - 1) }}">{{ next_title }}</a></li>
-		<li class = "active"><a href="{{ url_for('checkin.index', page = page) }}">{{ need_title }}</a></li>
-		<li><a href="{{ url_for('checkin.index', page = page + 1) }}">{{ prev_title }}</a></li>
+		<li><a href="{{ '{}{}'.format(pagination_url, page - 1) }}">{{ next_title }}</a></li>
+		<li class = "active"><a href="{{ '{}{}'.format(pagination_url, page) }}">{{ need_title }}</a></li>
+		<li><a href="{{ '{}{}'.format(pagination_url, page + 1) }}">{{ prev_title }}</a></li>
 	{% endif %}
 
 	<li class = "disabled"><a href="#">&hellip;</a></li>
-	<li><a href="{{ url_for('checkin.index', page = page + 1) }}">&raquo;</a></li>
+	<li><a href="{{ '{}{}'.format(pagination_url, page + 1) }}">&raquo;</a></li>
 </ul>

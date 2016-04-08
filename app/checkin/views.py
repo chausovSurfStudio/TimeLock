@@ -13,7 +13,7 @@ from datetime import datetime, timedelta, date, time as dt_time
 @login_required
 def index():
     page = request.args.get('page', 1, type = int)
-    graphs_and_time = Checkin.get_checkins_page(page)
+    graphs_and_time = Checkin.get_checkins_page(page, current_user.id)
     graphs = graphs_and_time[0]
     keys = graphs.keys()
     keys.sort()
@@ -39,12 +39,11 @@ def index():
     if delta_minutes < 10:
         delta_minutes = "0{}".format(delta_minutes)
     delta_string = "{}:{}".format(delta_hours, delta_minutes)
-
-
+    
     return render_template('checkin/checkin_main.html', user = current_user, graphs = graphs, keys = keys, page = page, 
     	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, 
         default_date_strings = default_date_strings, week_total = graphs_and_time[1],
-        delta = delta_string, negative_delta = bad_work)
+        delta = delta_string, negative_delta = bad_work, pagination_url = "/checkin/?page=")
 
 def create_default_strings(dates):
     dict = {}
