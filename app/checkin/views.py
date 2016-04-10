@@ -147,6 +147,8 @@ def edit_checkin(date_string, user_id):
 @checkin.route('/delete/<int:user_id>/<date_string>', methods = ['GET', 'POST'])
 @login_required
 def delete(date_string, user_id):
+    redirect_url = json.dumps(request.referrer)
+    session['redirect_url'] = redirect_url
     date = datetime.strptime(date_string, "%d %m %Y %H:%M")
     checkins_dict = get_checkins_for_date(date, user_id)
     keys = checkins_dict.keys()
@@ -163,10 +165,16 @@ def delete_checkin(date_string, user_id):
     selected_checkin = Checkin.get_checkin_with_time(selected_date, user_id)
     if not selected_checkin:
         flash("Not found checkins with selected time")
-        return redirect(url_for('checkin.index'))
+        return redirect(request.referrer)
     else:
         db.session.delete(selected_checkin)
         flash('Selected checkin has been removed')
+        redirect_url = session['redirect_url']
+        if redirect_url[0] == '"':
+            redirect_url = redirect_url[1:]
+        if redirect_url[-1] == '"':
+            redirect_url = redirect_url[:-1]
+        return redirect(redirect_url)
     return redirect(url_for('checkin.index'))
 
 
