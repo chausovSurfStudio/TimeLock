@@ -51,8 +51,8 @@ def create_default_strings(dates):
         dict.update({date: date.strftime("%d %m %Y %H:%M")})
     return dict
 
-def get_checkins_for_date(date):
-    checkins = Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(date, date + timedelta(days = 1))).order_by(Checkin.time)
+def get_checkins_for_date(date, user_id):
+    checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(date, date + timedelta(days = 1))).order_by(Checkin.time)
     checkins_dict = {}
     for checkin in checkins:
         checkins_dict.update({checkin.time.strftime("%A, %d %B %H:%M"): checkin.time.strftime("%d %m %Y %H:%M")})
@@ -63,20 +63,19 @@ def get_checkins_for_date(date):
 def checkin_with_current_time():
     now = datetime.now()
     now = now.replace(second = 0, microsecond = 0)
-    print(now)
     checkin = Checkin(time = now, user_id = current_user.id, trustLevel = True)
     db.session.add(checkin)
     flash('Checkin has been created')
     return redirect(url_for('checkin.index'))
 
-@checkin.route('/custom_time/<default_date_string>', methods = ['GET', 'POST'])
+@checkin.route('/custom_time/<int:user_id>/<default_date_string>', methods = ['GET', 'POST'])
 @login_required
-def checkin_with_custom_time(default_date_string):
+def checkin_with_custom_time(user_id, default_date_string):
     form  = CheckinCustomTimeForm()
     if form.validate_on_submit():
         time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
-        checkin = Checkin(time = custom_date, user_id = current_user.id, trustLevel = False)
+        checkin = Checkin(time = custom_date, user_id = user_id, trustLevel = False)
         db.session.add(checkin)
         return redirect(url_for('checkin.index'))
     default_date = datetime.strptime(default_date_string, "%d %m %Y %H:%M")
@@ -93,24 +92,24 @@ def checkins_create():
     default_date_string = datetime.now().strftime("%d %m %Y %H:%M")
     return render_template('checkin/checkins_create.html', default_date_string = default_date_string)
 
-@checkin.route('/edit/<date_string>', methods = ['GET', 'POST'])
+@checkin.route('/edit/<int:user_id>/<date_string>', methods = ['GET', 'POST'])
 @login_required
-def edit(date_string):
+def edit(date_string, user_id):
     date = datetime.strptime(date_string, "%d %m %Y %H:%M")
-    checkins_dict = get_checkins_for_date(date)
+    checkins_dict = get_checkins_for_date(date, user_id)
     keys = checkins_dict.keys()
     keys.sort()
     dict_is_empty = True
     if any(checkins_dict):
         dict_is_empty = False
-    return render_template('checkin/edit.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty)
+    return render_template('checkin/edit.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty, user_id = user_id)
 
-@checkin.route('/edit/checkin/<date_string>', methods = ['GET', 'POST'])
+@checkin.route('/edit/checkin/<int:user_id>/<date_string>', methods = ['GET', 'POST'])
 @login_required
-def edit_checkin(date_string):
+def edit_checkin(date_string, user_id):
     form  = CheckinCustomTimeForm()
     selected_date = datetime.strptime(date_string, "%d %m %Y %H:%M")
-    selected_checkin = Checkin.get_checkin_with_time(selected_date, current_user.id)
+    selected_checkin = Checkin.get_checkin_with_time(selected_date, user_id)
     if not selected_checkin:
         flash("Not found checkins with selected time")
         return redirect(url_for('checkin.index'))
@@ -130,23 +129,23 @@ def edit_checkin(date_string):
     selected_date = selected_date.strftime("%A, %d %B %H:%M")
     return render_template('checkin/edit_checkin.html', form = form, selected_date = selected_date)
 
-@checkin.route('/delete/<date_string>', methods = ['GET', 'POST'])
+@checkin.route('/delete/<int:user_id>/<date_string>', methods = ['GET', 'POST'])
 @login_required
-def delete(date_string):
+def delete(date_string, user_id):
     date = datetime.strptime(date_string, "%d %m %Y %H:%M")
-    checkins_dict = get_checkins_for_date(date)
+    checkins_dict = get_checkins_for_date(date, user_id)
     keys = checkins_dict.keys()
     keys.sort()
     dict_is_empty = True
     if any(checkins_dict):
         dict_is_empty = False
-    return render_template('checkin/delete.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty)
+    return render_template('checkin/delete.html', checkins = checkins_dict, keys = keys, dict_is_empty = dict_is_empty, user_id = user_id)
 
-@checkin.route('/delete/checkin/<date_string>')
+@checkin.route('/delete/checkin/<int:user_id>/<date_string>')
 @login_required
-def delete_checkin(date_string):
+def delete_checkin(date_string, user_id):
     selected_date = datetime.strptime(date_string, "%d %m %Y %H:%M")
-    selected_checkin = Checkin.get_checkin_with_time(selected_date, current_user.id)
+    selected_checkin = Checkin.get_checkin_with_time(selected_date, user_id)
     if not selected_checkin:
         flash("Not found checkins with selected time")
         return redirect(url_for('checkin.index'))

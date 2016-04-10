@@ -15,13 +15,13 @@
 				<h4>{{ moment(key).format('MMMM Do YYYY') }}</h4>
 				<div class="checkins-total-day">{{ graphs[key][1] }}</div>
 				<div class="checkins-buttons">
-					<a class="btn btn-success"  href="{{ url_for('checkin.checkin_with_custom_time', default_date_string = default_date_strings[key]) }}">
+					<a class="btn btn-success"  href="{{ url_for('checkin.checkin_with_custom_time', user_id = user.id, default_date_string = default_date_strings[key]) }}">
 						<img src="{{ url_for('static', filename='cross.png') }}" width="14" height="14">
 					</a>
-					<a class="btn btn-warning"  href="{{ url_for('checkin.edit', date_string = default_date_strings[key]) }}">
+					<a class="btn btn-warning"  href="{{ url_for('checkin.edit', user_id = user.id, date_string = default_date_strings[key]) }}">
 						<img src="{{ url_for('static', filename='draw.png') }}" width="14" height="14">
 					</a>
-					<a class="btn btn-danger"  href="{{ url_for('checkin.delete', date_string = default_date_strings[key]) }}">
+					<a class="btn btn-danger"  href="{{ url_for('checkin.delete', user_id = user.id, date_string = default_date_strings[key]) }}">
 						<img src="{{ url_for('static', filename='delete.png') }}" width="14" height="14">
 					</a>
 				</div>
