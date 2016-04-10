@@ -45,10 +45,10 @@ div.checkins-total-day {
 }
 
 div.checkins-total-week { 
-  width: 30%;
+  width: 32%;
   background: transparent;
   right: 0%;
-  top: 92px;
+  top: 20px;
   font-size: 18pt;
   font-weight: bold;
   text-align: left;

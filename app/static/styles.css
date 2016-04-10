@@ -1,6 +1,7 @@
 .pagination_my {
-  height: 65px;
+  height: 80px;
   margin: 0px 0;
+  position: relative;
 }
 
 .profile-thumbnail {
