@@ -2,8 +2,12 @@
 
 Дело в том, что в системе TimeLock была зарегистрирована новая компания под названием {{ company_name }} и вы являетесь модератором внутри нее в данной системе!
 
+Ваш e-mail в системе: {{ email }} 
+
+Ваш пароль: {{ password }} 
+
 Для подтверждения сего чуда пройдите по данной ссылке:
 
-{{ url_for('main.confirm_moderator', token = token, email = email, company_name = company_name, _external=True) }}
+{{ url_for('main.confirm', token = token, email = email, _external=True) }}
 
 Удачи!

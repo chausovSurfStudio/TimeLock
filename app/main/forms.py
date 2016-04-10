@@ -6,7 +6,10 @@ from app.model import Company, User, Role
 
 class NewCompanyForm(Form):
     name = StringField('Company name', validators = [Required(), Length(1, 64)])
-    email = StringField('Moderator email', validators=[Required(), Length(1, 64), Email()])
+    email = StringField('Moderator email', validators = [Required(), Length(1, 64), Email()])
+    password = StringField('Password', validators = [Required(), Length(1, 64)])
+    first_name = StringField('First Name', validators = [Length(1, 64)])
+    last_name = StringField('Last Name', validators = [Length(1, 64)])
     submit = SubmitField('Create Company')
 
     def validate_email(self, field):

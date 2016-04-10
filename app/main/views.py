@@ -23,13 +23,15 @@ def new_company():
 		user = User.query.filter_by(email = form.email.data).first()
 		if user is None:
 			user = User(email = form.email.data)
-		moderator_role = Role.query.filter_by(name = 'Moderator').first()
-		user.role = moderator_role
+		user.role = Role.query.filter_by(name = 'Moderator').first()
 		user.company = company
+		user.first_name = form.first_name.data
+		user.last_name = form.last_name.data
+		user.password = form.password.data
 		db.session.add(user)
 		db.session.commit()
 		token = user.generate_confirmation_token()
-		send_email(user.email, 'Confirm Your Account', 'mail/confirm_moderator', company_name = company.company_name, token = token, email = form.email.data)
+		send_email(user.email, 'Confirm Your Account', 'mail/confirm_moderator', company_name = company.company_name, token = token, email = form.email.data, password = form.password.data)
 		flash('You create new company, message to moderator has been sent')
 		return redirect(url_for('main.index'))
 	return render_template('new_company.html', form = form)
@@ -50,43 +52,19 @@ def clear_companies():
 @admin_required
 def clear_users():
 	User.query.delete()
+	Checkin.query.delete()
 	return redirect(url_for('main.index'))
 
-@main.route('/confirm_moderator/<token>/<email>/<company_name>', methods = ['GET', 'POST'])
-def confirm_moderator(token, email, company_name):
-	if current_user.is_anonymous:
-		user = User.query.filter_by(email = email).first()
-		if user is not None:
-			if user.confirmed and not user.password_is_empty():
-				flash('You already confirmed your account')
-				return redirect(url_for('main.index'))
-			if user.confirm(token):
-				flash('You have confirmed your account, thanks! Please, set new password')
-				return redirect(url_for('main.set_password', email = email, company_name = company_name))
-			else:
-				flash('The confirmation link is invalid or has expired')
-				return redirect(url_for('main.index'))
-		else:
-			flash('User with email ',email,' not found')
-			return redirect(url_for('main.index'))
-	else:
-		if current_user.confirmed:
-			return redirect(url_for('main.index'))
-		if current_user.email != email:
-			flash('Email in this link is not mutch with current account')
-			return redirect(url_for('main.index'))
-	return redirect(url_for('main.index'))
-
-@main.route('/set_password/<email>/<company_name>', methods = ['GET', 'POST'])
-def set_password(email, company_name):
-	user = User.query.filter_by(email = email).first()
-	form = SetPasswordForm()
-	if form.validate_on_submit():
-		user.password = form.password.data
-		db.session.add(user)
-		db.session.commit()
-		return redirect(url_for('main.index'))
-	return render_template('set_password.html', form = form, email = email, company_name = company_name)
+# @main.route('/set_password/<email>/<company_name>', methods = ['GET', 'POST'])
+# def set_password(email, company_name):
+# 	user = User.query.filter_by(email = email).first()
+# 	form = SetPasswordForm()
+# 	if form.validate_on_submit():
+# 		user.password = form.password.data
+# 		db.session.add(user)
+# 		db.session.commit()
+# 		return redirect(url_for('main.index'))
+# 	return render_template('set_password.html', form = form, email = email, company_name = company_name)
 
 @main.route('/user/<int:user_id>')
 @login_required
@@ -293,6 +271,32 @@ def confirm_new_user(token):
     else:
         flash('The confirmation link is invalid or has expired')
     return redirect(url_for('main.index'))
+
+@main.route('/comfirm/<token>/<email>')
+def confirm(token, email):
+	if current_user.is_anonymous:
+		user = User.query.filter_by(email = email).first()
+		if user is not None:
+			if user.confirmed:
+				flash('You already confirmed your account')
+				return redirect(url_for('main.index'))
+			if user.confirm(token):
+				flash('You have confirmed your account, thanks!')
+				return redirect(url_for('main.index'))
+			else:
+				flash('The confirmation link is invalid or has expired')
+				return redirect(url_for('main.index'))
+		else:
+			flash('User with email ',email,' not found')
+			return redirect(url_for('main.index'))
+	else:
+		if current_user.email != email:
+			flash('Email in this link is not much with current account')
+			return redirect(url_for('main.index'))
+		else:
+			flash('You already confirmed your account')
+			return redirect(url_for('main.index'))
+	return redirect(url_for('main.index'))
 
 
 
