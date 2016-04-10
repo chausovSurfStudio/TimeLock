@@ -72,12 +72,20 @@ def checkin_with_current_time():
 @login_required
 def checkin_with_custom_time(user_id, default_date_string):
     form  = CheckinCustomTimeForm()
+    if request.method == 'GET':
+        redirect_url = json.dumps(request.referrer)
+        session['redirect_url'] = redirect_url
     if form.validate_on_submit():
         time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
         checkin = Checkin(time = custom_date, user_id = user_id, trustLevel = False)
         db.session.add(checkin)
-        return redirect(url_for('checkin.index'))
+        redirect_url = session['redirect_url']
+        if redirect_url[0] == '"':
+            redirect_url = redirect_url[1:]
+        if redirect_url[-1] == '"':
+            redirect_url = redirect_url[:-1]
+        return redirect(redirect_url)
     default_date = datetime.strptime(default_date_string, "%d %m %Y %H:%M")
     form.minutes.data = default_date.minute
     form.hours.data = default_date.hour
@@ -92,7 +100,7 @@ def checkins_create():
     default_date_string = datetime.now().strftime("%d %m %Y %H:%M")
     return render_template('checkin/checkins_create.html', default_date_string = default_date_string)
 
-@checkin.route('/edit/<int:user_id>/<date_string>', methods = ['GET', 'POST'])
+@checkin.route('/edit/<int:user_id>/<date_string>', methods = ['GET'])
 @login_required
 def edit(date_string, user_id):
     redirect_url = json.dumps(request.referrer)
