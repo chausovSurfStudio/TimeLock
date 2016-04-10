@@ -216,7 +216,7 @@ def my_company():
 @main.route('/company/<company_name>', methods = ['GET'])
 @admin_required
 def company(company_name):
-	company = Company.query.filter_by(company_name = company_name).first()
+	company = Company.query.filter_by(company_name = company_name).first_or_404()
 	times_dict = {}
 	for employee in company.users:
 		times_dict[employee.id] = Checkin.get_work_time_in_four_last_week(employee.id)
