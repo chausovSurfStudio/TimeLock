@@ -1,10 +1,12 @@
-Уважаемый (ая) {{ user.last_name }} {{ user.first_name }}, 
+Уважаемый (ая) {{ user.last_name }} {{ user.first_name }},
 
 Добро пожаловать в TimeLock!
 
-Для подтверждения вашего аккаунта зайдите на сайт ({{ url_for('main.index', _external = True) }}), авторизуйтесь, а затем пройдите по ссылке:
+Для подтверждения вашего аккаунта пройдите по ссылке:
 
-{ url_for('main.confirm_new_user', token = token, _external = True) }}
+{ url_for('main.confirm', token = token, email = user.email, _external=True) }}
+
+Ваш e-mail в системе: {{ user.email }}
 
 Ваш пароль: {{ password }}
 

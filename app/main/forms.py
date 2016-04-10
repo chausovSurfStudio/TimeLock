@@ -73,7 +73,6 @@ class NewUserForm(Form):
     password = StringField('Password', validators = [Required(), Length(1, 64)])
     first_name = StringField('First Name', validators = [Length(1, 64)])
     last_name = StringField('Last Name', validators = [Length(1, 64)])
-    nfc_label = StringField('NFC-label', validators = [Length(1, 64)])
     submit = SubmitField('Submit')
 
     def validate_email(self, field):

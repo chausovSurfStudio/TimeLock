@@ -55,17 +55,6 @@ def clear_users():
 	Checkin.query.delete()
 	return redirect(url_for('main.index'))
 
-# @main.route('/set_password/<email>/<company_name>', methods = ['GET', 'POST'])
-# def set_password(email, company_name):
-# 	user = User.query.filter_by(email = email).first()
-# 	form = SetPasswordForm()
-# 	if form.validate_on_submit():
-# 		user.password = form.password.data
-# 		db.session.add(user)
-# 		db.session.commit()
-# 		return redirect(url_for('main.index'))
-# 	return render_template('set_password.html', form = form, email = email, company_name = company_name)
-
 @main.route('/user/<int:user_id>')
 @login_required
 def user(user_id):
@@ -250,7 +239,7 @@ def reset_password(token, email):
 def user_add(company_name):
 	form = NewUserForm()
 	if form.validate_on_submit():
-		user = User(email = form.email.data, first_name = form.first_name.data, last_name = form.last_name.data, nfc_label = form.nfc_label.data)
+		user = User(email = form.email.data, first_name = form.first_name.data, last_name = form.last_name.data)
 		user.password = form.password.data
 		user.company = Company.query.filter_by(company_name = company_name).first()
 		db.session.add(user)
@@ -260,17 +249,6 @@ def user_add(company_name):
 		flash('New user has been create')
 		return redirect(url_for('main.index'))
 	return render_template('user_add.html', form = form, company_name = company_name)
-
-@main.route('/confirm_new_user/<token>')
-@login_required
-def confirm_new_user(token):
-    if current_user.confirmed:
-        return redirect(url_for('main.index'))
-    if current_user.confirm(token):
-        flash('You have confirmed your account, thanks!')
-    else:
-        flash('The confirmation link is invalid or has expired')
-    return redirect(url_for('main.index'))
 
 @main.route('/comfirm/<token>/<email>')
 def confirm(token, email):
