@@ -80,11 +80,7 @@ def checkin_with_custom_time(user_id, default_date_string):
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
         checkin = Checkin(time = custom_date, user_id = user_id, trustLevel = False)
         db.session.add(checkin)
-        redirect_url = session['redirect_url']
-        if redirect_url[0] == '"':
-            redirect_url = redirect_url[1:]
-        if redirect_url[-1] == '"':
-            redirect_url = redirect_url[:-1]
+        redirect_url = redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
     default_date = datetime.strptime(default_date_string, "%d %m %Y %H:%M")
     form.minutes.data = default_date.minute
@@ -130,11 +126,7 @@ def edit_checkin(date_string, user_id):
         selected_checkin.trustLevel = False
         db.session.add(selected_checkin)
         flash("Checkin has been updated")
-        redirect_url = session['redirect_url']
-        if redirect_url[0] == '"':
-            redirect_url = redirect_url[1:]
-        if redirect_url[-1] == '"':
-            redirect_url = redirect_url[:-1]
+        redirect_url = redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
     form.minutes.data = selected_date.minute
     form.hours.data = selected_date.hour
@@ -169,15 +161,17 @@ def delete_checkin(date_string, user_id):
     else:
         db.session.delete(selected_checkin)
         flash('Selected checkin has been removed')
-        redirect_url = session['redirect_url']
-        if redirect_url[0] == '"':
-            redirect_url = redirect_url[1:]
-        if redirect_url[-1] == '"':
-            redirect_url = redirect_url[:-1]
+        redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
     return redirect(url_for('checkin.index'))
 
-
+def get_redirect_url_from_session():
+    redirect_url = session['redirect_url']
+    if redirect_url[0] == '"':
+        redirect_url = redirect_url[1:]
+    if redirect_url[-1] == '"':
+        redirect_url = redirect_url[:-1]
+    return redirect_url
 
 
 
