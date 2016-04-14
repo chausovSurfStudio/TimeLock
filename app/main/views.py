@@ -156,7 +156,6 @@ def edit_profile_admin(id):
 @login_required
 def my_company():
 	page = request.args.get('page', 1, type = int)
-	TimeCache.get_cached_week_time(current_user.id, page)
 	company = current_user.company;
 	clear_times = {}
 	for employee in company.users:
@@ -169,7 +168,6 @@ def my_company():
 		for time in clear_times[employee.id]:
 			string_times[employee.id].append(get_work_time_string(time))
 			delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
-	print(delta_string_times)
 	return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, pagination_url = "my_company?page=", page = page)
 
 def get_work_time_string(time):

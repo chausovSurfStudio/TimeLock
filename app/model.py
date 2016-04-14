@@ -376,7 +376,7 @@ class TimeCache(db.Model):
         (year, week, weekday) = day.isocalendar()
         (end_year, end_week, weekday) = last_day.isocalendar()
         time = [];
-        while year <= end_year and week <= end_week:
+        while year < end_year or (year == end_year and week <= end_week):
             cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
             if cache is not None:
                 time.append(cache.time)
