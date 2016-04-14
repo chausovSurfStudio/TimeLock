@@ -66,7 +66,7 @@ def checkin_with_current_time():
     checkin = Checkin(time = now, user_id = current_user.id, trustLevel = True)
     db.session.add(checkin)
     flash('Checkin has been created')
-    return redirect(url_for('checkin.index'))
+    return redirect(url_for('main.index'))
 
 @checkin.route('/custom_time/<int:user_id>/<default_date_string>', methods = ['GET', 'POST'])
 @login_required

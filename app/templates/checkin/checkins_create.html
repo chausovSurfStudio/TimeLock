@@ -35,7 +35,7 @@ setInterval(getDate, 100);
 	</div>
 	<br>
 	<div class="checkins-create-button">
-		<a class="btn btn-danger btn-block" href="{{ url_for('checkin.checkin_with_custom_time', default_date_string = default_date_string) }}">
+		<a class="btn btn-danger btn-block" href="{{ url_for('checkin.checkin_with_custom_time', default_date_string = default_date_string, user_id = current_user.id) }}">
 			Чекин с произвольным временем
 		</a>
 	</div>
