@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, date, time as dt_time
 from flask import Markup
 from time import strftime
 import hashlib
+import calendar
 
 class Permission:
     CHECKIN = 0x01
@@ -366,7 +367,35 @@ class TimeCache(db.Model):
         db.session.add(cache)
         return time
 
+    @staticmethod
+    def get_cached_week_time(user_id, month_page):
+        current_day = datetime.now().date()
+        first_day = TimeCache.get_first_day(current_day, 0, -month_page + 1)
+        last_day = TimeCache.get_last_day(first_day)
+        day = first_day;
+        (year, week, weekday) = day.isocalendar()
+        (end_year, end_week, weekday) = last_day.isocalendar()
+        time = [];
+        while year <= end_year and week <= end_week:
+            cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
+            if cache is not None:
+                time.append(cache.time)
+            else:
+                time.append(0)
+            day = day + timedelta(days = 7)
+            (year, week, weekday) = day.isocalendar()
+        print("FUCKING TIME = ", time)
 
+    @staticmethod
+    def get_first_day(dt, d_years = 0, d_months = 0):
+        # d_years, d_months are "deltas" to apply to dt
+        y, m = dt.year + d_years, dt.month + d_months
+        a, m = divmod(m - 1, 12)
+        return date(y + a, m + 1, 1)
+
+    @staticmethod
+    def get_last_day(dt):
+        return TimeCache.get_first_day(dt, 0, 1) + timedelta(-1)
 
 
 

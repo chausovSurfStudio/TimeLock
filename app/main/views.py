@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
-from app.model import User, Company, Role, Checkin
+from app.model import User, Company, Role, Checkin, TimeCache
 from app.decorators import admin_required, admin_moderator_required
 from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm
 from app.email import send_email
@@ -155,6 +155,7 @@ def edit_profile_admin(id):
 @main.route('/my_company', methods = ['GET'])
 @login_required
 def my_company():
+	TimeCache.get_cached_week_time(current_user.id, 1)
 	company = current_user.company;
 	times_dict = {}
 	for employee in company.users:
