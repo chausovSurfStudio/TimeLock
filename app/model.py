@@ -343,6 +343,29 @@ class TimeCache(db.Model):
     time = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    @staticmethod
+    def update_cache(user_id, date):
+        date_tuple = date.isocalendar()
+        year = date_tuple[0]
+        week = date_tuple[1]
+        delta = timedelta(days = date.weekday())
+        begin_day = date.date() - delta;
+        i = 0
+        time = 0
+        while i < 7:
+            end_day = begin_day + timedelta(days = 1)
+            checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(begin_day, end_day)).order_by(Checkin.time)
+            time += Checkin.get_work_time_for_checkins(checkins)
+            begin_day = end_day
+            i += 1
+        cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
+        if not cache:
+            cache = TimeCache(user_id = user_id, week = week, year = year, time = time)
+        else:
+            cache.time = time;
+        db.session.add(cache)
+        return time
+
 
 
 

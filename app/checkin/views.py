@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash, request, json, sess
 from flask.ext.login import login_required, current_user
 from . import checkin
 from app import db
-from app.model import User, Company, Role, Checkin
+from app.model import User, Company, Role, Checkin, TimeCache
 from app.decorators import admin_required, admin_moderator_required
 from app.email import send_email
 from app.checkin.forms import CheckinWithCurrentTimeForm, CheckinCustomTimeForm
@@ -65,6 +65,7 @@ def checkin_with_current_time():
     now = now.replace(second = 0, microsecond = 0)
     checkin = Checkin(time = now, user_id = current_user.id, trustLevel = True)
     db.session.add(checkin)
+    TimeCache.update_cache(current_user.id, now)
     flash('Checkin has been created')
     return redirect(url_for('main.index'))
 
@@ -80,6 +81,7 @@ def checkin_with_custom_time(user_id, default_date_string):
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
         checkin = Checkin(time = custom_date, user_id = user_id, trustLevel = False)
         db.session.add(checkin)
+        TimeCache.update_cache(user_id, custom_date)
         redirect_url = redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
     default_date = datetime.strptime(default_date_string, "%d %m %Y %H:%M")
@@ -125,6 +127,7 @@ def edit_checkin(date_string, user_id):
         selected_checkin.time = custom_date
         selected_checkin.trustLevel = False
         db.session.add(selected_checkin)
+        TimeCache.update_cache(user_id, custom_date)
         flash("Checkin has been updated")
         redirect_url = redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
@@ -160,6 +163,7 @@ def delete_checkin(date_string, user_id):
         return redirect(request.referrer)
     else:
         db.session.delete(selected_checkin)
+        TimeCache.update_cache(user_id, selected_date)
         flash('Selected checkin has been removed')
         redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
