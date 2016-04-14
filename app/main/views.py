@@ -156,6 +156,7 @@ def edit_profile_admin(id):
 @login_required
 def my_company():
 	page = request.args.get('page', 1, type = int)
+	week_titles, month_title = get_titles_for_employee_header(page)
 	company = current_user.company;
 	clear_times = {}
 	for employee in company.users:
@@ -168,7 +169,8 @@ def my_company():
 		for time in clear_times[employee.id]:
 			string_times[employee.id].append(get_work_time_string(time))
 			delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
-	return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, pagination_url = "my_company?page=", page = page)
+	return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, 
+		month_title = month_title, week_titles = week_titles, pagination_url = "my_company?page=", page = page)
 
 def get_work_time_string(time):
 	value_hours = time // 60
@@ -192,6 +194,20 @@ def get_delta_work_time_string(time, rate):
 		delta_minutes = "0{}".format(delta_minutes)
 	delta_string = "({}{}:{})".format(sign, delta_hours, delta_minutes)
 	return [delta_string, good_work]
+
+def get_titles_for_employee_header(month_page):
+	current_day = datetime.now().date()
+	first_day = TimeCache.get_first_day(current_day, 0, -month_page + 1)
+	last_day = TimeCache.get_last_day(first_day)
+	monday = first_day - timedelta(days = first_day.weekday())
+	titles = []
+	while monday < last_day:
+		next_monday = monday + timedelta(days = 7)
+		titles.append("{:02d}.{:02d} - {:02d}.{:02d}".format(monday.day, monday.month, next_monday.day, next_monday.month))
+		monday = next_monday
+	month_title = first_day.strftime("%B %Y")
+	return titles, month_title
+
 
 @main.route('/company/<company_name>', methods = ['GET'])
 @admin_required
