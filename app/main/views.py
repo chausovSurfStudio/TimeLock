@@ -155,31 +155,45 @@ def edit_profile_admin(id):
 @main.route('/my_company', methods = ['GET'])
 @login_required
 def my_company():
-	TimeCache.get_cached_week_time(current_user.id, 1)
+	page = request.args.get('page', 1, type = int)
+	TimeCache.get_cached_week_time(current_user.id, page)
 	company = current_user.company;
-	times_dict = {}
+	clear_times = {}
 	for employee in company.users:
-		times_dict[employee.id] = Checkin.get_work_time_in_four_last_week(employee.id)
-	delta_dict = {}
+		clear_times[employee.id] = TimeCache.get_cached_week_time(employee.id, page)
+	string_times = {}
+	delta_string_times = {}
 	for employee in company.users:
-		delta_array = []
-		rate_minutes = employee.rate * 60
-		for value in times_dict[employee.id][1]:
-			delta = rate_minutes - value
-			good_work = delta < 0
-			if good_work:
-				delta *= -1
-				sign = "+"
-			else:
-				sign = "-"
-			delta_hours = delta // 60
-			delta_minutes = delta % 60
-			if delta_minutes < 10:
-				delta_minutes = "0{}".format(delta_minutes)
-			delta_string = "({}{}:{})".format(sign, delta_hours, delta_minutes)
-			delta_array.append([delta_string, good_work])
-		delta_dict[employee.id] = delta_array
-	return render_template('company.html', company = company, times_dict = times_dict, delta_dict = delta_dict)
+		string_times[employee.id] = []
+		delta_string_times[employee.id] = []
+		for time in clear_times[employee.id]:
+			string_times[employee.id].append(get_work_time_string(time))
+			delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
+	print(delta_string_times)
+	return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, pagination_url = "my_company?page=", page = page)
+
+def get_work_time_string(time):
+	value_hours = time // 60
+	value_minutes = time % 60
+	if value_minutes < 10:
+		value_minutes = "0{}".format(value_minutes)
+	return "{}:{}".format(value_hours, value_minutes)
+
+def get_delta_work_time_string(time, rate):
+	rate_in_minutes = rate * 60
+	delta = rate_in_minutes - time
+	good_work = delta < 0
+	if good_work:
+		delta *= -1
+		sign = "+"
+	else:
+		sign = "-"
+	delta_hours = delta // 60
+	delta_minutes = delta % 60
+	if delta_minutes < 10:
+		delta_minutes = "0{}".format(delta_minutes)
+	delta_string = "({}{}:{})".format(sign, delta_hours, delta_minutes)
+	return [delta_string, good_work]
 
 @main.route('/company/<company_name>', methods = ['GET'])
 @admin_required

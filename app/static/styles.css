@@ -113,4 +113,27 @@ div.error-image {
     text-align: center;
 }
 
+div.employee-header {
+    width: 100%;
+    height: 38px;
+    /*background: red;*/
+    position: relative;
+    font-size: 12pt;
+}
+
+div.employee-header-month {
+    width: 10%;
+    left: 15%;
+    top: 0px;
+    /*background: green;*/
+    position: absolute;
+}
+
+div.employee-header-pagination {
+    width: 10%;
+    left: 26%;
+    top: -26px;
+    /*background: green;*/
+    position: absolute;
+}
 

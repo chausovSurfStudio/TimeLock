@@ -384,7 +384,7 @@ class TimeCache(db.Model):
                 time.append(0)
             day = day + timedelta(days = 7)
             (year, week, weekday) = day.isocalendar()
-        print("FUCKING TIME = ", time)
+        return time
 
     @staticmethod
     def get_first_day(dt, d_years = 0, d_months = 0):
