@@ -118,6 +118,7 @@ div.employee-header {
     height: 38px;
     position: relative;
     font-size: 12pt;
+    /*background: #e32;*/
 }
 
 div.employee-header-month {
@@ -125,6 +126,7 @@ div.employee-header-month {
     left: 15%;
     top: 0px;
     position: absolute;
+    /*background: #563;*/
 }
 
 div.employee-header-pagination {
@@ -132,5 +134,60 @@ div.employee-header-pagination {
     left: 28%;
     top: -26px;
     position: absolute;
+    /*background: #195;*/
+}
+
+div.employee-header-time1 {
+    position: absolute;
+    width: 10%;
+    left: 40%;
+    top: 0px;
+    text-align: center;
+    /*background: #961;*/
+}
+
+div.employee-header-time2 {
+    position: absolute;
+    width: 10%;
+    left: 50%;
+    top: 0px;
+    text-align: center;
+    /*background: #dd2;*/
+}
+
+div.employee-header-time3 {
+    position: absolute;
+    width: 10%;
+    left: 60%;
+    top: 0px;
+    text-align: center;
+    /*background: #5f3;*/
+}
+
+div.employee-header-time4 {
+    position: absolute;
+    width: 10%;
+    left: 70%;
+    top: 0px;
+    text-align: center;
+    /*background: #f34;*/
+}
+
+div.employee-header-time5 {
+    position: absolute;
+    width: 10%;
+    left: 80%;
+    top: 0px;
+    text-align: center;
+    /*background: #cd5;*/
+}
+
+div.employee-header-time6 {
+    position: absolute;
+    width: 10%;
+    left: 90%;
+    top: 0px;
+    text-align: center;
+/*    background: #af6;*/
 }
 

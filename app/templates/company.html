@@ -18,6 +18,12 @@
 				<li><a href="{{ '{}{}'.format(pagination_url, page - 1) }}">&raquo;</a></li>
 			</ul>
 		</div>	
+		<div class="employee-header-time1">{{ week_titles[0] }}</div>
+		<div class="employee-header-time2">{{ week_titles[1] }}</div>
+		<div class="employee-header-time3">{{ week_titles[2] }}</div>
+		<div class="employee-header-time4">{{ week_titles[3] }}</div>
+		<div class="employee-header-time5">{% if week_titles|count > 4 %} {{ week_titles[4] }} {% endif %}</div>
+		<div class="employee-header-time6">{% if week_titles|count > 5 %} {{ week_titles[5] }} {% endif %}</div>
 	</div>
 	{% include '_employees.html' %}
 	<br>
