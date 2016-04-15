@@ -44,6 +44,28 @@
                     {{ delta_string_times[user.id][3][0] }}
                     </span>
                 </div>
+                {% if string_times[user.id][4] %}
+                    <div class="work-times5">{{ string_times[user.id][4] }} 
+                        {% if delta_string_times[user.id][4][1] %}
+                            <span class="good-work">
+                        {% else %}
+                            <span class="bad-work">
+                        {% endif %}
+                        {{ delta_string_times[user.id][4][0] }}
+                        </span>
+                    </div>
+                {% endif %}
+                {% if string_times[user.id][5] %}
+                    <div class="work-times6">{{ string_times[user.id][5] }} 
+                        {% if delta_string_times[user.id][5][1] %}
+                            <span class="good-work">
+                        {% else %}
+                            <span class="bad-work">
+                        {% endif %}
+                        {{ delta_string_times[user.id][5][0] }}
+                        </span>
+                    </div>
+                {% endif %}
             </div>
 	    	<div class="post-author">
 	    		<a href="{{ url_for('main.user', user_id = user.id) }}">

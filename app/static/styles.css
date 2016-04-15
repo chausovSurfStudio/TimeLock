@@ -36,18 +36,20 @@ div.post-thumbnail {
 div.post-content {
     margin-left: 48px;
     min-height: 48px;
+    background: #e9e;
 }
 div.work-times {
     float: right;
-    width: 680px;
+    width: 675px;
     height: 45px;
     position: relative;
+    background: #ddd;
 }
 
 div.work-times1 {
-    width: 170px;
+    width: 16.66%;
     height: 100%;
-    left: 0px;
+    left: 0%;
     position: absolute;
     text-align: center;
     line-height: 40pt;
@@ -56,11 +58,12 @@ div.work-times1 {
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
+    background: #961;
 }
 div.work-times2 {
-    width: 170px;
+    width: 16.66%;
     height: 100%;
-    left: 170px;
+    left: 16.66%;
     position: absolute;
     text-align: center;
     line-height: 40pt;
@@ -69,11 +72,12 @@ div.work-times2 {
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
+    background: #dd2;
 }
 div.work-times3 {
-    width: 170px;
+    width: 16.66%;
     height: 100%;
-    left: 340px;
+    left: 33.32%;
     position: absolute;
     text-align: center;
     line-height: 40pt;
@@ -82,11 +86,12 @@ div.work-times3 {
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
+    background: #5f3;
 }
 div.work-times4 {
-    width: 170px;
+    width: 16.66%;
     height: 100%;
-    left: 510px;
+    left: 49.98%;
     position: absolute;
     text-align: center;
     line-height: 40pt;
@@ -95,6 +100,35 @@ div.work-times4 {
     letter-spacing: 2px;
     color: #424242;
     font-family: Helvetica;
+    background: #f34;
+}
+div.work-times5 {
+    width: 16.66%;
+    height: 100%;
+    left: 66.64%;
+    position: absolute;
+    text-align: center;
+    line-height: 40pt;
+    font-size: 14pt;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #424242;
+    font-family: Helvetica;
+    background: #cd5;
+}
+div.work-times6 {
+    width: 16.66%;
+    height: 100%;
+    left: 83.3%;
+    position: absolute;
+    text-align: center;
+    line-height: 40pt;
+    font-size: 14pt;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #424242;
+    font-family: Helvetica;
+    background: #af6;
 }
 
 span.good-work {
@@ -118,7 +152,7 @@ div.employee-header {
     height: 38px;
     position: relative;
     font-size: 12pt;
-    /*background: #e32;*/
+    background: #e32;
 }
 
 div.employee-header-month {
@@ -126,7 +160,7 @@ div.employee-header-month {
     left: 15%;
     top: 0px;
     position: absolute;
-    /*background: #563;*/
+    background: #563;
 }
 
 div.employee-header-pagination {
@@ -134,7 +168,7 @@ div.employee-header-pagination {
     left: 28%;
     top: -26px;
     position: absolute;
-    /*background: #195;*/
+    background: #195;
 }
 
 div.employee-header-time1 {
@@ -143,7 +177,7 @@ div.employee-header-time1 {
     left: 40%;
     top: 0px;
     text-align: center;
-    /*background: #961;*/
+    background: #961;
 }
 
 div.employee-header-time2 {
@@ -152,7 +186,7 @@ div.employee-header-time2 {
     left: 50%;
     top: 0px;
     text-align: center;
-    /*background: #dd2;*/
+    background: #dd2;
 }
 
 div.employee-header-time3 {
@@ -161,7 +195,7 @@ div.employee-header-time3 {
     left: 60%;
     top: 0px;
     text-align: center;
-    /*background: #5f3;*/
+    background: #5f3;
 }
 
 div.employee-header-time4 {
@@ -170,7 +204,7 @@ div.employee-header-time4 {
     left: 70%;
     top: 0px;
     text-align: center;
-    /*background: #f34;*/
+    background: #f34;
 }
 
 div.employee-header-time5 {
@@ -179,7 +213,7 @@ div.employee-header-time5 {
     left: 80%;
     top: 0px;
     text-align: center;
-    /*background: #cd5;*/
+    background: #cd5;
 }
 
 div.employee-header-time6 {
@@ -188,6 +222,6 @@ div.employee-header-time6 {
     left: 90%;
     top: 0px;
     text-align: center;
-/*    background: #af6;*/
+    background: #af6;
 }
 
