@@ -201,10 +201,10 @@ def get_titles_for_employee_header(month_page):
 	last_day = TimeCache.get_last_day(first_day)
 	monday = first_day - timedelta(days = first_day.weekday())
 	titles = []
-	while monday < last_day:
-		next_monday = monday + timedelta(days = 7)
-		titles.append("{:02d}.{:02d} - {:02d}.{:02d}".format(monday.day, monday.month, next_monday.day, next_monday.month))
-		monday = next_monday
+	while monday <= last_day:
+		sunday = monday + timedelta(days = 6)
+		titles.append("{:02d}.{:02d} - {:02d}.{:02d}".format(monday.day, monday.month, sunday.day, sunday.month))
+		monday = monday + timedelta(days = 7)
 	month_title = first_day.strftime("%B %Y")
 	return titles, month_title
 
