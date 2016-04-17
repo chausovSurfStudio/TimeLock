@@ -39,6 +39,7 @@ class EditProfileAdminForm(Form):
     first_name = StringField('First Name', validators = [Length(0, 64)])
     last_name = StringField('Last Name', validators = [Length(0, 64)])
     middle_name = StringField('Middle Name', validators = [Length(0, 64)])
+    rate = StringField('Rate', validators = [Required(), Length(1, 2)])
     nfc_label = StringField('NFC-label', validators = [Length(0, 64)])
     confirmed = BooleanField('Confirmed')
     role = SelectField('Role', coerce = int)
@@ -59,11 +60,16 @@ class EditProfileAdminForm(Form):
         if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = field.data).first():
             raise ValidationError('NFC label already in use')
 
+    def validate_rate(self, field):
+        if not field.data.isdigit():
+            raise ValidationError('You must input number of hours there, not string')
+
 class EditProfileModeratorForm(Form):
     username = StringField('Username', validators = [Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Usernames must have only letters, numbers, dots or underscores')])
     first_name = StringField('First Name', validators = [Length(0, 64)])
     last_name = StringField('Last Name', validators = [Length(0, 64)])
     middle_name = StringField('Middle Name', validators = [Length(0, 64)])
+    rate = StringField('Rate', validators = [Required(), Length(1, 2)])
     nfc_label = StringField('NFC-label', validators = [Length(0, 64)])
     confirmed = BooleanField('Confirmed')
     role = SelectField('Role', coerce = int)
@@ -81,6 +87,10 @@ class EditProfileModeratorForm(Form):
     def validate_nfc_label(self, field):
         if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = field.data).first():
             raise ValidationError('NFC label already in use')
+
+    def validate_rate(self, field):
+        if not field.data.isdigit():
+            raise ValidationError('You must input number of hours there, not string')
 
 class ResetPasswordRequestForm(Form):
     email = StringField('Email', validators = [Required(), Length(1, 64), Email()])

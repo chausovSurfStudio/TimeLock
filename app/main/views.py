@@ -134,6 +134,7 @@ def edit_profile_admin(id):
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.middle_name = form.middle_name.data
+        user.rate = form.rate.data
         user.role = Role.query.get(form.role.data)
         user.company = Company.query.get(form.company.data)
         user.nfc_label = form.nfc_label.data
@@ -145,6 +146,7 @@ def edit_profile_admin(id):
     form.first_name.data = user.first_name
     form.last_name.data = user.last_name
     form.middle_name.data = user.middle_name
+    form.rate.data = user.rate
     form.role.data = user.role_id
     form.company.data = user.company_id
     form.nfc_label.data = user.nfc_label
@@ -166,6 +168,7 @@ def edit_profile_moderator(id):
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.middle_name = form.middle_name.data
+        user.rate = form.rate.data
         user.role = Role.query.get(form.role.data)
         user.nfc_label = form.nfc_label.data
         user.confirmed = form.confirmed.data
@@ -176,6 +179,7 @@ def edit_profile_moderator(id):
     form.first_name.data = user.first_name
     form.last_name.data = user.last_name
     form.middle_name.data = user.middle_name
+    form.rate.data = user.rate
     form.role.data = user.role_id
     form.nfc_label.data = user.nfc_label
     form.confirmed.data = user.confirmed
