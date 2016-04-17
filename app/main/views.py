@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
@@ -156,6 +156,10 @@ def edit_profile_admin(id):
 @admin_moderator_required
 def edit_profile_moderator(id):
     user = User.query.get_or_404(id)
+    if user.is_moderator() or user.is_administrator():
+    	return abort(403)
+    if user.company != current_user.company:
+    	return abort(403)
     form = EditProfileModeratorForm(user = user)
     if form.validate_on_submit():
         user.username = form.username.data
