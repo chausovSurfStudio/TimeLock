@@ -59,6 +59,29 @@ class EditProfileAdminForm(Form):
         if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = field.data).first():
             raise ValidationError('NFC label already in use')
 
+class EditProfileModeratorForm(Form):
+    username = StringField('Username', validators = [Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Usernames must have only letters, numbers, dots or underscores')])
+    first_name = StringField('First Name', validators = [Length(0, 64)])
+    last_name = StringField('Last Name', validators = [Length(0, 64)])
+    middle_name = StringField('Middle Name', validators = [Length(0, 64)])
+    nfc_label = StringField('NFC-label', validators = [Length(0, 64)])
+    confirmed = BooleanField('Confirmed')
+    role = SelectField('Role', coerce = int)
+    submit = SubmitField('Submit')
+
+    def __init__(self, user, *args, **kwargs):
+        super(EditProfileModeratorForm, self).__init__(*args, **kwargs)
+        self.role.choices = [(role.id, role.name) for role in Role.query.filter(Role.permissions.between(0, 7)).order_by(Role.name).all()]
+        self.user = user
+
+    def validate_username(self, field):
+        if field.data != self.user.username and User.query.filter_by(username = field.data).first():
+            raise ValidationError('Username already in use')
+
+    def validate_nfc_label(self, field):
+        if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = field.data).first():
+            raise ValidationError('NFC label already in use')
+
 class ResetPasswordRequestForm(Form):
     email = StringField('Email', validators = [Required(), Length(1, 64), Email()])
     submit = SubmitField('Send mail to reset password')

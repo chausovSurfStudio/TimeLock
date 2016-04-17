@@ -34,8 +34,12 @@
 		<a class="btn btn-default"  href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
 		{% endif %}
 		
-		{% if current_user.is_administrator() or (current_user.is_moderator() and current_user.company == user.company and not user.is_administrator())%}
+		{% if current_user.is_administrator() %}
 		<a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id = user.id) }}">Edit Profile [Admin]</a>
+		{% else %}
+			{% if current_user.is_moderator() and current_user.company == user.company and not user.is_administrator() and not user.is_moderator() %}
+			<a class="btn btn-danger" href="{{ url_for('main.edit_profile_moderator', id = user.id) }}">Edit Profile [Moderator]</a>
+			{% endif %}
 		{% endif %}
 
 	</div>

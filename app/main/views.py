@@ -4,7 +4,7 @@ from . import main
 from app import db
 from app.model import User, Company, Role, Checkin, TimeCache
 from app.decorators import admin_required, admin_moderator_required
-from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm
+from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm, EditProfileModeratorForm
 from app.email import send_email
 from datetime import datetime, timedelta, date, time as dt_time
 
@@ -123,10 +123,9 @@ def edit_profile():
     form.nfc_label.data = current_user.nfc_label
     return render_template('edit_profile.html', form = form)
 
-
-@main.route('/edit_profile/<int:id>', methods = ['GET', 'POST'])
+@main.route('/edit_profile_admin/<int:id>', methods = ['GET', 'POST'])
 @login_required
-@admin_moderator_required
+@admin_required
 def edit_profile_admin(id):
     user = User.query.get_or_404(id)
     form = EditProfileAdminForm(user = user)
@@ -148,6 +147,32 @@ def edit_profile_admin(id):
     form.middle_name.data = user.middle_name
     form.role.data = user.role_id
     form.company.data = user.company_id
+    form.nfc_label.data = user.nfc_label
+    form.confirmed.data = user.confirmed
+    return render_template('edit_profile.html', form = form, user = user)
+
+@main.route('/edit_profile/<int:id>', methods = ['GET', 'POST'])
+@login_required
+@admin_moderator_required
+def edit_profile_moderator(id):
+    user = User.query.get_or_404(id)
+    form = EditProfileModeratorForm(user = user)
+    if form.validate_on_submit():
+        user.username = form.username.data
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.middle_name = form.middle_name.data
+        user.role = Role.query.get(form.role.data)
+        user.nfc_label = form.nfc_label.data
+        user.confirmed = form.confirmed.data
+        db.session.add(user)
+        flash('The profile has been updated.')
+        return redirect(url_for('main.user', user_id = user.id))
+    form.username.data = user.username
+    form.first_name.data = user.first_name
+    form.last_name.data = user.last_name
+    form.middle_name.data = user.middle_name
+    form.role.data = user.role_id
     form.nfc_label.data = user.nfc_label
     form.confirmed.data = user.confirmed
     return render_template('edit_profile.html', form = form, user = user)
