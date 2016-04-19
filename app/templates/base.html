@@ -64,6 +64,14 @@
 
                		{% endif %}
 
+               		<li>
+               			<form action="http://w3.org">
+    						<button type="submit" class="play-button">
+    							<img src="{{ url_for('static', filename='play.png') }}" width="20" height="20" class="play-image">
+    						</button>
+						</form>
+               		</li>
+
 	    	    {% endif %}
 			</ul>	
 			<ul class="nav navbar-nav navbar-right">
