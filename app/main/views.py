@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, abort
+from flask import redirect, url_for, flash, request, abort
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
@@ -8,6 +8,7 @@ from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileA
 from app.email import send_email
 from datetime import datetime, timedelta, date, time as dt_time
 from app.production_calendar import work_days_count
+from app.timelock_utils import render_template
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():

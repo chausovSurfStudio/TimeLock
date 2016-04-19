@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, json, session
+from flask import redirect, url_for, flash, request, json, session
 from flask.ext.login import login_required, current_user
 from . import checkin
 from app import db
@@ -7,6 +7,7 @@ from app.decorators import admin_required, admin_moderator_required
 from app.email import send_email
 from app.checkin.forms import CheckinWithCurrentTimeForm, CheckinCustomTimeForm
 from datetime import datetime, timedelta, date, time as dt_time
+from app.timelock_utils import render_template
 
 
 @checkin.route('/', methods = ['GET'])
