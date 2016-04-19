@@ -7,9 +7,12 @@ from app.decorators import admin_required, admin_moderator_required
 from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm, EditProfileModeratorForm
 from app.email import send_email
 from datetime import datetime, timedelta, date, time as dt_time
+from app.production_calendar import work_days_count
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
+	qwe = work_days_count(2015, 8)
+	print(qwe)
 	return render_template('index.html')
 
 @main.route('/new_company', methods = ['GET', 'POST'])
