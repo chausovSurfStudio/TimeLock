@@ -110,13 +110,17 @@ def create_default_strings(dates):
 @main.route('/edit_profile', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(user = current_user)
     if form.validate_on_submit():
     	current_user.username = form.username.data
         current_user.first_name = form.first_name.data
         current_user.last_name = form.last_name.data
         current_user.middle_name = form.middle_name.data
         current_user.nfc_label = form.nfc_label.data
+        if form.nfc_label.data != "":
+        	current_user.nfc_label = form.nfc_label.data
+        else:
+        	current_user.nfc_label = None
         db.session.add(current_user)
         flash('Your profile has been updated.')
         return redirect(url_for('main.user', user_id = current_user.id))
@@ -141,7 +145,10 @@ def edit_profile_admin(id):
         user.rate = form.rate.data
         user.role = Role.query.get(form.role.data)
         user.company = Company.query.get(form.company.data)
-        user.nfc_label = form.nfc_label.data
+        if form.nfc_label.data != "":
+        	user.nfc_label = form.nfc_label.data
+        else:
+        	user.nfc_label = None
         user.confirmed = form.confirmed.data
         db.session.add(user)
         flash('The profile has been updated.')
@@ -174,7 +181,10 @@ def edit_profile_moderator(id):
         user.middle_name = form.middle_name.data
         user.rate = form.rate.data
         user.role = Role.query.get(form.role.data)
-        user.nfc_label = form.nfc_label.data
+        if form.nfc_label.data != "":
+        	user.nfc_label = form.nfc_label.data
+        else:
+        	user.nfc_label = None
         user.confirmed = form.confirmed.data
         db.session.add(user)
         flash('The profile has been updated.')

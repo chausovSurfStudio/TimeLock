@@ -34,6 +34,18 @@ class EditProfileForm(Form):
     nfc_label = StringField('NFC-label', validators = [Length(0, 64)])
     submit = SubmitField('Submit')
 
+    def __init__(self, user, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.user = user
+
+    def validate_username(self, field):
+        if field.data != self.user.username and User.query.filter_by(username = field.data).first():
+            raise ValidationError('Username already in use')
+
+    def validate_nfc_label(self, field):
+        if field.data != self.user.nfc_label and User.query.filter_by(nfc_label = field.data).first():
+            raise ValidationError('NFC label already in use')
+
 class EditProfileAdminForm(Form):
     username = StringField('Username', validators = [Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, 'Usernames must have only letters, numbers, dots or underscores')])
     first_name = StringField('First Name', validators = [Length(0, 64)])
