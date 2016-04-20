@@ -66,7 +66,13 @@
                		{% endif %}
                		<li>
                			<div class="button-play"> 
-							<a href="#"><img src="{{ url_for('static', filename='square.png') }}"> Начать работу</a> 
+							<a href="{{ url_for('checkin.checkin_with_current_time') }}">
+								{% if current_work_time %}
+									<img src="{{ url_for('static', filename='square.png') }}"> <div class="play-button-description" id="current_work_display"></div>
+								{% else %}
+									<img src="{{ url_for('static', filename='play.png') }}"> <div class="play-button-description">Начать работу</div>
+								{% endif %}
+							</a> 
 						</div>
                		</li>
 
@@ -116,6 +122,28 @@
 	{% endfor %}
 	{% block page_content %}{% endblock %}
 </div>
+<script type="text/javascript">
+function getCurrentWorkTime() {
+    var date = new Date();
+    var begin_minutes = {{ current_work_time }}
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var end_minutes = hours * 60 + minutes;
+    var delta = end_minutes - begin_minutes;
+    hours = delta / 60 | 0
+    minutes = delta % 60
+    if (minutes < 10) {
+    	minutes = '0' + minutes
+    }
+    if (hours < 10) {
+    	hours = '0' + hours
+    }
+    document.getElementById('current_work_display').innerHTML = hours + ':' + minutes;
+    document.getElementById('current_work_display').style.margin = 50;
+}
+
+setInterval(getCurrentWorkTime, 100);
+</script>
 {% endblock %}
 
 {% block scripts %}

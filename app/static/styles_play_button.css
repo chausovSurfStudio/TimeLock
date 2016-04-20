@@ -1,6 +1,7 @@
 div.button-play {
-    position: relative;
+    position: absolute;
     top: 2px;
+    height: 45px;
 }
 
 .button-play a {
@@ -27,4 +28,11 @@ div.button-play {
 
 .button-play a img:active { 
     background-color: #777; 
+}
+
+div.play-button-description {
+    position: relative;
+    width: 100px;
+    top: -32px;
+    left: 50px;
 }
