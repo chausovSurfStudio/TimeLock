@@ -6,6 +6,7 @@
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_checkin.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_play_button.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -63,13 +64,10 @@
 	                	{% endif %}	
 
                		{% endif %}
-
                		<li>
-               			<form action="#">
-    						<button type="submit" class="play-button">
-    							<img src="{{ url_for('static', filename='play.png') }}" width="20" height="20" class="play-image">
-    						</button>
-						</form>
+               			<div class="button-play"> 
+							<a href="#"><img src="{{ url_for('static', filename='square.png') }}"> Начать работу</a> 
+						</div>
                		</li>
 
 	    	    {% endif %}

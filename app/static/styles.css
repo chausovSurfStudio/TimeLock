@@ -201,20 +201,3 @@ div.employee-header-time6 {
     top: 0px;
     text-align: center;
 }
-
-button.play-button {
-    width: 45px;
-    height: 45px;
-    background-color: transparent;
-    border-radius: 100%;
-    border: 2px solid gray;
-    outline: none;
-}
-
-button.play-button:hover {
-    border-color: white;
-}
-
-button.play-button:active {
-    background-color: gray;
-}
