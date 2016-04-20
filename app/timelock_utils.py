@@ -16,6 +16,8 @@ def render_template(tmpl_name, **kwargs):
 def get_last_checkin_in_current_day():
 	today = datetime.now().date()
 	tomorrow = today + timedelta(days = 1)
+	if not current_user.is_authenticated:
+		return None
 	query = Checkin.query.filter_by(user_id = current_user.id).filter(Checkin.time.between(today, tomorrow)).order_by(desc(Checkin.time))
 	checkin = query.first()
 	if query.count() % 2 == 1:
