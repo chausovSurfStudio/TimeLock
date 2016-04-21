@@ -259,30 +259,22 @@ def get_titles_for_employee_header(month_page):
 @main.route('/company/<company_name>', methods = ['GET'])
 @admin_required
 def company(company_name):
+	page = request.args.get('page', 1, type = int)
+	week_titles, month_title = get_titles_for_employee_header(page)
 	company = Company.query.filter_by(company_name = company_name).first_or_404()
-	times_dict = {}
+	clear_times = {}
 	for employee in company.users:
-		times_dict[employee.id] = Checkin.get_work_time_in_four_last_week(employee.id)
-	delta_dict = {}
+		clear_times[employee.id] = TimeCache.get_cached_week_time(employee.id, page)
+	string_times = {}
+	delta_string_times = {}
 	for employee in company.users:
-		delta_array = []
-		rate_minutes = employee.rate * 60
-		for value in times_dict[employee.id][1]:
-			delta = rate_minutes - value
-			good_work = delta < 0
-			if good_work:
-				delta *= -1
-				sign = "+"
-			else:
-				sign = "-"
-			delta_hours = delta // 60
-			delta_minutes = delta % 60
-			if delta_minutes < 10:
-				delta_minutes = "0{}".format(delta_minutes)
-			delta_string = "({}{}:{})".format(sign, delta_hours, delta_minutes)
-			delta_array.append([delta_string, good_work])
-		delta_dict[employee.id] = delta_array
-	return render_template('company.html', company = company, times_dict = times_dict, delta_dict = delta_dict)
+		string_times[employee.id] = []
+		delta_string_times[employee.id] = []
+		for time in clear_times[employee.id]:
+			string_times[employee.id].append(get_work_time_string(time))
+			delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
+	return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, 
+		month_title = month_title, week_titles = week_titles, pagination_url = "{}?page=".format(company.company_name), page = page)
 
 @main.route('/reset_password_request', methods = ['GET', 'POST'])
 def reset_password_request():
