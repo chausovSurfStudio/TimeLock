@@ -344,6 +344,18 @@ def confirm(token, email):
 			return redirect(url_for('main.index'))
 	return redirect(url_for('main.index'))
 
+@main.route('/send_confirmed_mail', methods = ['GET', 'POST'])
+def send_confirmed_mail():
+	form = ResetPasswordRequestForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(email = form.email.data).first_or_404()
+		token = user.generate_confirmation_token()
+		send_email(user.email, 'Confirmed your account', 'mail/mail_with_confirmation_link', token = token, user = user)
+		flash('Mail with special link has been send in your email address')
+		return redirect(url_for('main.index'))
+	return render_template('reset_password_request.html', form = form)
+
+
 
 
 

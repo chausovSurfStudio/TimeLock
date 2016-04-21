@@ -11,4 +11,5 @@
     {{ wtf.quick_form(form) }}
 </div>
 <p><a href="{{ url_for('main.reset_password_request') }}">Забыли пароль?</a></p>
+<p><a href="{{ url_for('main.send_confirmed_mail') }}">Или нужно повторно отправить ссылку для активации аккаунта?</a></p>
 {% endblock %}

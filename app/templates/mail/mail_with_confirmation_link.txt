@@ -1,0 +1,7 @@
+Уважаемый {{ user.username }}, 
+
+Для активации вашего аккаунта пройдите по данной ссылке:
+
+{{ url_for('main.confirm', token = token, email = user.email, _external=True) }}
+
+Всего хорошего!

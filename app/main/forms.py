@@ -106,7 +106,7 @@ class EditProfileModeratorForm(Form):
 
 class ResetPasswordRequestForm(Form):
     email = StringField('Email', validators = [Required(), Length(1, 64), Email()])
-    submit = SubmitField('Send mail to reset password')
+    submit = SubmitField('Send mail')
 
     def validate_email(self, field):
         user = User.query.filter_by(email = field.data).first()

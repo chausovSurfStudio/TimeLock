@@ -1,0 +1,5 @@
+<p>Уважаемый {{ user.username }}, </p>
+<p></p>
+<p>Для активации вашего аккаунта пройдите по данной ссылке:</p>
+<p>{{ url_for('main.confirm', token = token, email = user.email, _external=True) }}</p>
+<p>Всего хорошего!</p>

@@ -4,7 +4,7 @@
 
 Для подтверждения вашего аккаунта пройдите по ссылке:
 
-{ url_for('main.confirm', token = token, email = user.email, _external=True) }}
+{{ url_for('main.confirm', token = token, email = user.email, _external=True) }}
 
 Ваш e-mail в системе: {{ user.email }}
 
