@@ -50,11 +50,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default = False)
     nfc_label = db.Column(db.String(64), unique = True, index = True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
-    checkins = db.relationship('Checkin', backref = 'user', lazy = 'dynamic')
-    timeCaches = db.relationship('TimeCache', backref = 'user', lazy = 'dynamic')
-    rate = db.Column(db.Integer, default = 40)
     #other info
     first_name = db.Column(db.String(64))
     middle_name = db.Column(db.String(64))
@@ -62,6 +57,13 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default = datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
+    rate = db.Column(db.Integer, default = 40)
+    #relationship
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
+    checkins = db.relationship('Checkin', backref = 'user', lazy = 'dynamic')
+    timeCaches = db.relationship('TimeCache', backref = 'user', lazy = 'dynamic')
+    posts = db.relationship('Post', backref = 'autor', lazy = 'dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -396,6 +398,14 @@ class TimeCache(db.Model):
     @staticmethod
     def get_last_day(dt):
         return TimeCache.get_first_day(dt, 0, 1) + timedelta(-1)
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.now)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 
 
 
