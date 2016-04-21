@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 
+	TimeLock - Confirm Delete Action
+{% endblock %}
+
+{% block page_content %} 
+<div class="page-header">
+	<h1>Подтвердите действие</h1>
+</div>
+<div class="col-md-4">
+	{{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

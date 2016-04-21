@@ -5,10 +5,11 @@ from app import db
 from app.model import User, Company, Role, Checkin, TimeCache, Post, Permission
 from app.decorators import admin_required, admin_moderator_required
 from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm, EditProfileModeratorForm, PostForm
+from forms import ConfirmDeleteDBEntityForm
 from app.email import send_email
 from datetime import datetime, timedelta, date, time as dt_time
 from app.production_calendar import work_days_count
-from app.timelock_utils import render_template
+from app.timelock_utils import render_template, delete_company_with_id, delete_user_with_id
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
@@ -358,6 +359,15 @@ def send_confirmed_mail():
 		flash('Mail with special link has been send in your email address')
 		return redirect(url_for('main.index'))
 	return render_template('reset_password_request.html', form = form)
+
+@main.route('/delete/company/<int:comp_id>', methods = ['GET', 'POST'])
+def delete_company(comp_id):
+	form = ConfirmDeleteDBEntityForm(current_user)
+	if form.validate_on_submit():
+		delete_company_with_id(comp_id)
+		flash('Company has been deleted')
+		return redirect(url_for('main.index'))
+	return render_template('confirm_delete_action.html', form = form)
 
 
 

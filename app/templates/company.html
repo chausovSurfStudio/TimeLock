@@ -7,7 +7,10 @@
 
 {% block page_content %} 
 	<div class="page-header">
-		<h1>{{ company.company_name }}</h1>
+		<h1>{{ company.company_name }}
+		{% if current_user.is_administrator() %}
+			<a class="btn btn-danger" href="{{ url_for('main.delete_company', comp_id = company.id) }}">Удалить компанию</a>
+		{% endif %}</h1>
 	</div>
 	<div class="employee-header">
 		<div class="employee-header-month">{{ month_title }}</div>
@@ -27,6 +30,6 @@
 	{% include '_employees.html' %}
 	<br>
 	{% if current_user.is_administrator() or current_user.is_moderator() %}
-		<a class="btn btn-default"  href="{{ url_for('main.user_add', company_name = company.company_name) }}">Добавить пользователя</a>
+		<a class="btn btn-default" href="{{ url_for('main.user_add', company_name = company.company_name) }}">Добавить пользователя</a>
 	{% endif %}
 {% endblock %}

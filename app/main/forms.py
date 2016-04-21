@@ -129,5 +129,16 @@ class PostForm(Form):
     body = TextAreaField("What's on yout mind?", validators = [Required()])
     submit = SubmitField("Send")
 
+class ConfirmDeleteDBEntityForm(Form):
+    password = StringField('Password', validators = [Required(), Length(1, 64)])
+    submit = SubmitField('Delete')
+
+    def __init__(self, user, *args, **kwargs):
+        super(ConfirmDeleteDBEntityForm, self).__init__(*args, **kwargs)
+        self.user = user
+
+    def validate_password(self, field):
+        if not self.user.verify_password(field.data):
+            raise ValidationError('Incorrect password!')
 
 
