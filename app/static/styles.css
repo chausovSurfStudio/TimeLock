@@ -201,3 +201,11 @@ div.employee-header-time6 {
     top: 0px;
     text-align: center;
 }
+
+div.delete-user-button {
+    left: -50px;
+    top: 15px;
+    width: 45px;
+    height: 45px;
+    position: absolute;
+}

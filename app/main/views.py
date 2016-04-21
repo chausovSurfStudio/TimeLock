@@ -205,7 +205,7 @@ def edit_profile_moderator(id):
     return render_template('edit_profile.html', form = form, user = user)
 
 @main.route('/my_company', methods = ['GET'])
-@login_required
+@admin_moderator_required
 def my_company():
 	page = request.args.get('page', 1, type = int)
 	week_titles, month_title = get_titles_for_employee_header(page)
@@ -367,7 +367,16 @@ def delete_company(comp_id):
 		delete_company_with_id(comp_id)
 		flash('Company has been deleted')
 		return redirect(url_for('main.index'))
-	return render_template('confirm_delete_action.html', form = form)
+	return render_template('confirm_delete_company.html', form = form)
+
+@main.route('/delete/user/<int:user_id>', methods = ['GET', 'POST'])
+def delete_user(user_id):
+	form = ConfirmDeleteDBEntityForm(current_user)
+	if form.validate_on_submit():
+		delete_user_with_id(user_id)
+		flash('User has been deleted')
+		return redirect(url_for('main.index'))
+	return render_template('confirm_delete_user.html', form = form)
 
 
 
