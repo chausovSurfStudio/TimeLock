@@ -5,7 +5,7 @@ div.button-play {
 }
 
 .button-play a {
-    color: #777;
+    color: #9d9d9d;
     text-decoration: none;
 }
 
@@ -19,7 +19,7 @@ div.button-play {
     padding: 10px 10px;
     background-color: transparent; 
     border-radius: 100%; 
-    border: 2px solid #777;
+    border: 2px solid #9d9d9d;
 } 
 
 .button-play a img:hover { 
@@ -27,7 +27,7 @@ div.button-play {
 }
 
 .button-play a img:active { 
-    background-color: #777; 
+    background-color: #9d9d9d; 
 }
 
 div.play-button-description {
