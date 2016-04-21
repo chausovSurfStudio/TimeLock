@@ -23,7 +23,7 @@
 			Last seen {{ moment(user.last_seen).fromNow() }}
 		</p>
 
-		<p>Адрес электронной почты: {{ current_user.email }}</p>
+		<p>Адрес электронной почты: {{ user.email }}</p>
 		<p>Роль: {{ user.role.name }}</p>
 		{% if user.company %}
     		<h1>Работает в компании {{ user.company.company_name }}</h1>
