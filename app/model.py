@@ -63,7 +63,7 @@ class User(UserMixin, db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
     checkins = db.relationship('Checkin', backref = 'user', lazy = 'dynamic')
     timeCaches = db.relationship('TimeCache', backref = 'user', lazy = 'dynamic')
-    posts = db.relationship('Post', backref = 'autor', lazy = 'dynamic')
+    posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from app.model import Company, User, Role
@@ -124,6 +124,10 @@ class NewUserForm(Form):
         user = User.query.filter_by(email = field.data).first()
         if user is not None:
             raise ValidationError('Email already registered')
+
+class PostForm(Form):
+    body = TextAreaField("What's on yout mind?", validators = [Required()])
+    submit = SubmitField("Send")
 
 
 

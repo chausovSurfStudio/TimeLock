@@ -2,9 +2,9 @@ from flask import redirect, url_for, flash, request, abort
 from flask.ext.login import login_required, current_user
 from . import main
 from app import db
-from app.model import User, Company, Role, Checkin, TimeCache
+from app.model import User, Company, Role, Checkin, TimeCache, Post, Permission
 from app.decorators import admin_required, admin_moderator_required
-from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm, EditProfileModeratorForm
+from forms import NewCompanyForm, SetPasswordForm, EditProfileForm, EditProfileAdminForm, ResetPasswordRequestForm, NewUserForm, EditProfileModeratorForm, PostForm
 from app.email import send_email
 from datetime import datetime, timedelta, date, time as dt_time
 from app.production_calendar import work_days_count
@@ -12,9 +12,13 @@ from app.timelock_utils import render_template
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
-	qwe = work_days_count(2015, 8)
-	print(qwe)
-	return render_template('index.html')
+	form = PostForm()
+	if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+		post = Post(body = form.body.data, author = current_user._get_current_object())
+		db.session.add(post)
+		return redirect(url_for('main.index'))
+	posts = Post.query.order_by(Post.timestamp.desc()).all()
+	return render_template('index.html', form = form, posts = posts)
 
 @main.route('/new_company', methods = ['GET', 'POST'])
 @admin_required
