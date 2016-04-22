@@ -55,3 +55,38 @@ def delete_post_with_id(post_id):
 	post = Post.query.filter_by(id = post_id).first_or_404()
 	db.session.delete(post)
 
+def get_user_work_time_for_month_page(user_id, month_page):
+	current_day = datetime.now().date()
+	first_day = TimeCache.get_first_day(current_day, 0, -month_page + 1)
+	last_day = TimeCache.get_last_day(first_day)
+	next_first_day = last_day + timedelta(days = 1)
+	day = first_day;
+	(year, week, weekday) = day.isocalendar()
+	(end_year, end_week, weekday) = last_day.isocalendar()
+	time = 0;
+	while weekday != 1:
+		next_day = day + timedelta(days = 1)
+		checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(day, next_day)).order_by(Checkin.time)
+		time += Checkin.get_work_time_for_checkins(checkins)
+		day = next_day
+		(year, week, weekday) = day.isocalendar()
+	monday = day
+	next_monday = monday + timedelta(days = 7)
+	while next_monday <= next_first_day:
+		cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
+		if cache is not None:
+			time += cache.time
+		monday = next_monday
+		next_monday = monday + timedelta(days = 7)
+		(year, week, weekday) = monday.isocalendar()
+	day = monday
+	next_day = day + timedelta(days = 1)
+	while day <= last_day:
+		checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(day, next_day)).order_by(Checkin.time)
+		time += Checkin.get_work_time_for_checkins(checkins)
+		day = next_day
+		next_day = day + timedelta(days = 1)
+	return time
+
+
+
