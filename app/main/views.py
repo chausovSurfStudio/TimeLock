@@ -385,20 +385,19 @@ def work_time_in_percent():
 	company = current_user.company;
 	current_day = datetime.now().date()
 	first_day = TimeCache.get_first_day(current_day, 0, -page + 1)
-	(year, week, weekday) = first_day.isocalendar()
 	time_dict = {}
 	for user in company.users:
 		time_dict[user.id] = []
 		minutes = get_user_work_time_for_month_page(user.id, page)
 		time_dict[user.id].append(format_full_time_string_from_minutes(minutes))
 		minutes_in_day = float(user.rate) / 5 * 60
-		work_day = work_days_count(year, first_day.month)
+		work_day = work_days_count(first_day.year, first_day.month)
 		full_minutes = work_day * minutes_in_day
 		percent = float(minutes) / full_minutes * 100
 		time_dict[user.id].append("{:.2f}%".format(percent))
 		time_dict[user.id].append(format_full_time_string_from_minutes(full_minutes))
 	month_title = first_day.strftime("%B %Y")
-	work_days = work_days_count(year, first_day.month)
+	work_days = work_days_count(first_day.year, first_day.month)
 	return render_template('employees_and_work_in_percent.html', company = company, pagination_url = "work_time_in_percent?page=", page = page, 
 		time_dict = time_dict, month_title = month_title, work_days = work_days)
 
