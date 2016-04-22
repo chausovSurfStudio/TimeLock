@@ -1,3 +1,5 @@
+#coding=utf-8
+
 import flask
 from app import db
 from datetime import datetime, timedelta
@@ -87,6 +89,11 @@ def get_user_work_time_for_month_page(user_id, month_page):
 		day = next_day
 		next_day = day + timedelta(days = 1)
 	return time
+
+def format_full_time_string_from_minutes(minutes):
+	hours = minutes // 60
+	minutes = minutes % 60
+	return "{} hours {} minutes".format(hours, minutes)
 
 
 

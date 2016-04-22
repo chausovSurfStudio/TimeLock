@@ -1,0 +1,30 @@
+<ul class = "posts">
+    {% for user in company.users %}
+    <li class = "post">
+        <div class = "profile-thumbnail">
+            <a href="{{ url_for('main.user', user_id = user.id) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size = 40) }}">
+            </a>
+        </div>
+	    <div class="post-content">
+            <div class="work-times">    
+                Отработано: {{time_dict[user.id][0]}} / {{time_dict[user.id][2]}} ( {{time_dict[user.id][1]}} )
+            </div>
+	    	<div class="post-author">
+	    		<a href="{{ url_for('main.user', user_id = user.id) }}">
+    	    		{% if user.first_name or user.last_name %}
+                    <p>
+                        {% if user.last_name %}{{ user.last_name }}{% endif %}
+                        {% if user.first_name %}{{ user.first_name }}{% endif %}
+                        {% if user.middle_name %}{{ user.middle_name }}{% endif %}
+                    </p>
+                    {% endif %}
+	    		</a>
+	    	</div>
+	    	<div class="post-body">
+                <p>Ставка = {{ user.rate }} часов</p>
+            </div>
+    	</div>
+    </li>
+    {% endfor %}
+</ul>

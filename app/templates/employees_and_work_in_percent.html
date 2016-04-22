@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 
+	TimeLock - {{ company.company_name }}
+{% endblock %}
+
+{% block page_content %} 
+	<div class="page-header">
+		<h1>{{ company.company_name }}
+		{% if current_user.is_administrator() %}
+			<a class="btn btn-danger" href="{{ url_for('main.delete_company', comp_id = company.id) }}">Удалить компанию</a>
+		{% endif %}</h1>
+	</div>
+	<div class="employee-header">
+		<div class="employee-percent-header-month">{{ month_title }} ( рабочих дней: {{ work_days }} )</div>
+		<div class="employee-percent-header-pagination">
+			<ul class = "pagination">
+				<li><a href="{{ '{}{}'.format(pagination_url, page + 1) }}">&laquo;</a></li>
+				<li><a href="{{ '{}{}'.format(pagination_url, page - 1) }}">&raquo;</a></li>
+			</ul>
+		</div>	
+	</div>
+	{% include '_employees_work_in_percent.html' %}
+	<br>
+{% endblock %}

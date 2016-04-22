@@ -9,7 +9,7 @@ from forms import ConfirmDeleteDBEntityForm
 from app.email import send_email
 from datetime import datetime, timedelta, date, time as dt_time
 from app.production_calendar import work_days_count
-from app.timelock_utils import render_template, delete_company_with_id, delete_user_with_id, get_user_work_time_for_month_page
+from app.timelock_utils import render_template, delete_company_with_id, delete_user_with_id, get_user_work_time_for_month_page, format_full_time_string_from_minutes
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
@@ -377,6 +377,30 @@ def delete_user(user_id):
 		flash('User has been deleted')
 		return redirect(url_for('main.index'))
 	return render_template('confirm_delete_user.html', form = form)
+
+@main.route('/work_time_in_percent', methods = ['GET'])
+@admin_moderator_required
+def work_time_in_percent():
+	page = request.args.get('page', 1, type = int)
+	company = current_user.company;
+	current_day = datetime.now().date()
+	first_day = TimeCache.get_first_day(current_day, 0, -page + 1)
+	(year, week, weekday) = first_day.isocalendar()
+	time_dict = {}
+	for user in company.users:
+		time_dict[user.id] = []
+		minutes = get_user_work_time_for_month_page(user.id, page)
+		time_dict[user.id].append(format_full_time_string_from_minutes(minutes))
+		minutes_in_day = float(user.rate) / 5 * 60
+		work_day = work_days_count(year, first_day.month)
+		full_minutes = work_day * minutes_in_day
+		percent = float(minutes) / full_minutes * 100
+		time_dict[user.id].append("{:.2f}%".format(percent))
+		time_dict[user.id].append(format_full_time_string_from_minutes(full_minutes))
+	month_title = first_day.strftime("%B %Y")
+	work_days = work_days_count(year, first_day.month)
+	return render_template('employees_and_work_in_percent.html', company = company, pagination_url = "work_time_in_percent?page=", page = page, 
+		time_dict = time_dict, month_title = month_title, work_days = work_days)
 
 
 

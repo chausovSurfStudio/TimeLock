@@ -209,3 +209,17 @@ div.delete-user-button {
     height: 45px;
     position: absolute;
 }
+
+div.employee-percent-header-month {
+    width: 27%;
+    left: 0%;
+    top: 0px;
+    position: absolute;
+}
+
+div.employee-percent-header-pagination {
+    width: 10%;
+    left: 28%;
+    top: -26px;
+    position: absolute;
+}

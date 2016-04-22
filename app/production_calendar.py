@@ -14,6 +14,7 @@ prod_calendar_dict_2016 = {
 }
 
 def work_days_count(year, month):
+	count = 0.001
 	if year == 2016:
 		return prod_calendar_dict_2016[month]
-	return 0
+	return count
