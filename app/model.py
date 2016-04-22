@@ -126,6 +126,9 @@ class User(UserMixin, db.Model):
         hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url = url, hash = hash, size = size, default = default, rating = rating)
 
+    def equal_company(self, user):
+        return self.company == user.company
+
     def __repr__(self):
         return '<User %r>' % self.username
 

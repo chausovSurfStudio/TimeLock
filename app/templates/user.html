@@ -10,7 +10,7 @@
     		<h1>{{ user.username }}</h1>
     	{% endif %}
 
-		{% if user.first_name or user.last_name %}
+		{% if (user.first_name or user.last_name) and (current_user.equal_company(user) or current_user.is_administrator())%}
 		<p>
 			{% if user.last_name %}{{ user.last_name }}{% endif %}
 			{% if user.first_name %}{{ user.first_name }}{% endif %}
@@ -19,8 +19,10 @@
 		{% endif %}
 
 		<p>
-			Member since {{ moment(user.member_since).format('LLLL') }}.
-			Last seen {{ moment(user.last_seen).fromNow() }}
+			Дата регистрации: {{ moment(user.member_since).format('LLLL') }}.
+		</p>
+		<p>
+			Последнее посещение: {{ moment(user.last_seen).fromNow() }}
 		</p>
 
 		<p>Адрес электронной почты: {{ user.email }}</p>
@@ -37,14 +39,14 @@
 		{% if current_user.is_administrator() %}
 		<a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id = user.id) }}">Edit Profile [Admin]</a>
 		{% else %}
-			{% if current_user.is_moderator() and current_user.company == user.company and not user.is_administrator() and not user.is_moderator() %}
+			{% if current_user.is_moderator() and current_user.equal_company(user) and not user.is_administrator() and not user.is_moderator() %}
 			<a class="btn btn-danger" href="{{ url_for('main.edit_profile_moderator', id = user.id) }}">Edit Profile [Moderator]</a>
 			{% endif %}
 		{% endif %}
 
 	</div>
 </div>
-{% if current_user.is_moderator() %}
+{% if (current_user.is_moderator() and current_user.equal_company(user)) or current_user.is_administrator() %}
 	{% include '_checkins_graph.html' %}
 {% endif %}
 {% endblock %}
