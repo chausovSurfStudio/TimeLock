@@ -64,6 +64,7 @@ class User(UserMixin, db.Model):
     checkins = db.relationship('Checkin', backref = 'user', lazy = 'dynamic')
     timeCaches = db.relationship('TimeCache', backref = 'user', lazy = 'dynamic')
     posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
+    notes = db.relationship('Note', backref = 'author', lazy = 'dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -404,6 +405,13 @@ class TimeCache(db.Model):
 
 class Post(db.Model):
     __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.now)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class Note(db.Model):
+    __tablename__ = 'notes'
     id = db.Column(db.Integer, primary_key = True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.now)
