@@ -81,9 +81,13 @@ def checkin_with_custom_time(user_id, default_date_string):
         time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
         checkin = Checkin(time = custom_date, user_id = user_id, trustLevel = False)
+        redirect_url = get_redirect_url_from_session()
+        if checkin.time > datetime.now():
+            flash('No one can predict the future!')
+            return redirect(redirect_url)
         db.session.add(checkin)
         TimeCache.update_cache(user_id, custom_date)
-        redirect_url = redirect_url = get_redirect_url_from_session()
+        flash('Checkin has been created')
         return redirect(redirect_url)
     default_date = datetime.strptime(default_date_string, "%d %m %Y %H:%M")
     form.minutes.data = default_date.minute
@@ -123,14 +127,17 @@ def edit_checkin(date_string, user_id):
         flash("Not found checkins with selected time")
         return redirect(request.referrer)
     if form.validate_on_submit():
+        redirect_url = get_redirect_url_from_session()
         time_string = "{} {} {} {} {}".format(form.day.data, form.month.data, form.year.data, form.hours.data, form.minutes.data)
         custom_date = datetime.strptime(time_string, "%d %m %Y %H %M")
+        if custom_date > datetime.now():
+            flash('No one can predict the future!')
+            return redirect(redirect_url)
         selected_checkin.time = custom_date
         selected_checkin.trustLevel = False
         db.session.add(selected_checkin)
         TimeCache.update_cache(user_id, custom_date)
         flash("Checkin has been updated")
-        redirect_url = redirect_url = get_redirect_url_from_session()
         return redirect(redirect_url)
     form.minutes.data = selected_date.minute
     form.hours.data = selected_date.hour
