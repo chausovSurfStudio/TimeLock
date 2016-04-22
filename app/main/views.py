@@ -285,9 +285,9 @@ def company(company_name):
 def reset_password_request():
 	form = ResetPasswordRequestForm()
 	if form.validate_on_submit():
-		user = User.query.filter_by(email = form.email.data).first()
+		user = User.query.filter_by(email = form.email.data).first_or_404()
 		token = user.generate_confirmation_token()
-		send_email(user.email, 'Reset your password', 'mail/reset_password', token = token, email = form.email.data, user = user)
+		send_email(user.email, 'Reset your password', 'mail/reset_password', token = token, user = user)
 		flash('Mail with special link has been send in your email address')
 		return redirect(url_for('main.index'))
 	return render_template('reset_password_request.html', form = form)
