@@ -30,6 +30,12 @@
 				</div>
 			</div>
 			{{ graphs[key][0] }}
+			{% if graphs[key][2]|length > 0 %} <a class="note-header">Заметки:</a>{% endif %}
+			{% for note in graphs[key][2] %}
+			<div class="checkin-notes">
+				{{ note.body }}
+			</div>
+			{% endfor %}
 		</div>
 	{% endfor %}
 </div>

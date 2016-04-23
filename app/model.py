@@ -1,3 +1,5 @@
+#coding=utf-8
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin, AnonymousUserMixin, current_user
 from . import db, login_manager
@@ -214,14 +216,24 @@ class Checkin(db.Model):
             total_string = format_string.format(total_hours, total_minutes)
             work_time_formats.append(total_string)
 
+        notes = {
+        monday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(monday, datetime.min.time())).order_by(Note.id).all(),
+        tuesday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(tuesday, datetime.min.time())).order_by(Note.id).all(),
+        wednesday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(wednesday, datetime.min.time())).order_by(Note.id).all(),
+        thursday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(thursday, datetime.min.time())).order_by(Note.id).all(),
+        friday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(friday, datetime.min.time())).order_by(Note.id).all(),
+        saturday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(saturday, datetime.min.time())).order_by(Note.id).all(),
+        sunday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(sunday, datetime.min.time())).order_by(Note.id).all(),
+        }
+
         result_dict = {
-        monday: [Checkin.get_graphics_html(dict[monday], monday.weekday()), work_time_formats[0]],
-        tuesday: [Checkin.get_graphics_html(dict[tuesday], tuesday.weekday()), work_time_formats[1]],
-        wednesday: [Checkin.get_graphics_html(dict[wednesday], wednesday.weekday()), work_time_formats[2]],
-        thursday: [Checkin.get_graphics_html(dict[thursday], thursday.weekday()), work_time_formats[3]],
-        friday: [Checkin.get_graphics_html(dict[friday], friday.weekday()), work_time_formats[4]],
-        saturday: [Checkin.get_graphics_html(dict[saturday], saturday.weekday()), work_time_formats[5]],
-        sunday: [Checkin.get_graphics_html(dict[sunday], sunday.weekday()), work_time_formats[6]] 
+        monday: [Checkin.get_graphics_html(dict[monday], monday.weekday()), work_time_formats[0], notes[monday]],
+        tuesday: [Checkin.get_graphics_html(dict[tuesday], tuesday.weekday()), work_time_formats[1], notes[tuesday]],
+        wednesday: [Checkin.get_graphics_html(dict[wednesday], wednesday.weekday()), work_time_formats[2], notes[wednesday]],
+        thursday: [Checkin.get_graphics_html(dict[thursday], thursday.weekday()), work_time_formats[3], notes[thursday]],
+        friday: [Checkin.get_graphics_html(dict[friday], friday.weekday()), work_time_formats[4], notes[friday]],
+        saturday: [Checkin.get_graphics_html(dict[saturday], saturday.weekday()), work_time_formats[5], notes[saturday]],
+        sunday: [Checkin.get_graphics_html(dict[sunday], sunday.weekday()), work_time_formats[6], notes[sunday]] 
         }
 
         return result_dict, week_time_string, week_time
@@ -232,7 +244,7 @@ class Checkin(db.Model):
 
         if (checkins.count() < 2):
             if (checkins.count() == 0):
-                result_string = "<p>Empty day</p>"
+                result_string = "<p>On this day there was no checkins</p>"
             else:
                 #this case will be processed later
                 print("this case will be processed later")
