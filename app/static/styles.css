@@ -21,6 +21,9 @@ ul.posts li.post {
     padding: 8px;
     border-bottom: 1px solid #e0e0e0;
 }
+ul.posts li.post:hover div.delete-user-button {
+    visibility: visible;
+}
 ul.posts li.post:hover {
     background-color: #f0f0f0;
 }
@@ -208,6 +211,7 @@ div.delete-user-button {
     width: 45px;
     height: 45px;
     position: absolute;
+    visibility: hidden;
 }
 
 div.employee-percent-header-month {
