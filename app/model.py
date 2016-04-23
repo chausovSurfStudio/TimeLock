@@ -276,8 +276,8 @@ class Checkin(db.Model):
                 end_minutes = second_checkin.time.hour * 60 + second_checkin.time.minute
                 x_begin = int(width * (begin_minutes / minutes_count))
                 x_end = int(width * (end_minutes / minutes_count))
-                begin_color = "#F3C05E"
-                end_color = "#F3C05E"
+                begin_color = "#30D547"
+                end_color = "#30D547"
                 if (first_checkin.trustLevel):
                     begin_color = "green"
                 if (second_checkin.trustLevel):

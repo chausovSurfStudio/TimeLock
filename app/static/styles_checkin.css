@@ -22,6 +22,7 @@ div.checkins-graphs {
   background: #fff;
   color: #db0202;
   margin: auto;
+  min-height: 80px;
 }
 
 div.checkins-header { 
@@ -36,7 +37,7 @@ div.checkins-total-day {
   width: 70px;
   background: transparent;
   color: #00800d;
-  left: 25%;
+  left: 40%;
   top: -9px;
   font-size: 18pt;
   font-weight: bold;
@@ -118,7 +119,7 @@ div.checkin-notes  {
   font-size: 10pt;
   color: #666;
   padding: 3px 10px;
-  margin: 0px 0px 15px 0px;
+  margin: 3px 0px 2px 0px;
   border-radius: 7px;
 }
 
@@ -131,4 +132,11 @@ a.note-header {
   color: #555;
   font-weight: bold;
   font-size: 12pt;
+}
+
+div.checkin-notes-container {
+  background-color: #eee;
+  padding: 10px 15px;
+  margin: 0px 0px 17px 0px;
+  border-radius: 7px;
 }

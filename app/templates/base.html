@@ -150,5 +150,6 @@ setInterval(getCurrentWorkTime, 100);
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+{{ moment.lang("ru") }}
 <script src="{{ url_for('static', filename='floating_hint.js') }}"></script>
 {% endblock %}

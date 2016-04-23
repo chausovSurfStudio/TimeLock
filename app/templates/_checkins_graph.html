@@ -12,7 +12,7 @@
 	{% for key in keys %}
 		<div class="checkins-graphs">
 			<div class="checkins-header">
-				<h4>{{ moment(key).format('MMMM Do YYYY') }}</h4>
+				<h4>{{ moment(key).format('dddd, D MMMM YYYY') }}</h4>
 				<div class="checkins-total-day">{{ graphs[key][1] }}</div>
 				<div class="checkins-buttons">
 					<a class="btn btn-success"  href="{{ url_for('checkin.add_note', user_id = user.id, date_string = default_date_strings[key]) }}">
@@ -30,12 +30,14 @@
 				</div>
 			</div>
 			{{ graphs[key][0] }}
-			{% if graphs[key][2]|length > 0 %} <a class="note-header">Заметки:</a>{% endif %}
-			{% for note in graphs[key][2] %}
-			<div class="checkin-notes">
-				{{ note.body }}
+			<div class="checkin-notes-container">
+				{% if graphs[key][2]|length > 0 %} <a class="note-header">Заметки:</a>{% endif %}
+				{% for note in graphs[key][2] %}
+				<div class="checkin-notes">
+					{{ note.body }}
+				</div>
+				{% endfor %}
 			</div>
-			{% endfor %}
 		</div>
 	{% endfor %}
 </div>
