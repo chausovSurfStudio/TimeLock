@@ -2,12 +2,12 @@ from flask import redirect, url_for, flash, request, json, session
 from flask.ext.login import login_required, current_user
 from . import checkin
 from app import db
-from app.model import User, Company, Role, Checkin, TimeCache
+from app.model import User, Company, Role, Checkin, TimeCache, Note
 from app.decorators import admin_required, admin_moderator_required
 from app.email import send_email
-from app.checkin.forms import CheckinWithCurrentTimeForm, CheckinCustomTimeForm
+from app.checkin.forms import CheckinWithCurrentTimeForm, CheckinCustomTimeForm, CreateNoteForm
 from datetime import datetime, timedelta, date, time as dt_time
-from app.timelock_utils import render_template
+from app.timelock_utils import render_template, get_redirect_url_from_session
 
 
 @checkin.route('/', methods = ['GET'])
@@ -177,13 +177,21 @@ def delete_checkin(date_string, user_id):
         return redirect(redirect_url)
     return redirect(url_for('checkin.index'))
 
-def get_redirect_url_from_session():
-    redirect_url = session['redirect_url']
-    if redirect_url[0] == '"':
-        redirect_url = redirect_url[1:]
-    if redirect_url[-1] == '"':
-        redirect_url = redirect_url[:-1]
-    return redirect_url
+@checkin.route('/checkin/note/<int:user_id>/<date_string>', methods = ['GET', 'POST'])
+@login_required
+def add_note(user_id, date_string):
+    form  = CreateNoteForm()
+    if request.method == 'GET':
+        redirect_url = json.dumps(request.referrer)
+        session['redirect_url'] = redirect_url
+    if form.validate_on_submit():
+        note_date = datetime.strptime(date_string, "%d %m %Y %H:%M")
+        note = Note(body = form.body.data, timestamp = note_date.date(), author_id = user_id)
+        redirect_url = get_redirect_url_from_session()
+        db.session.add(note)
+        flash('Note has been created')
+        return redirect(redirect_url)
+    return render_template('checkin/custom_time.html', form = form)
 
 
 

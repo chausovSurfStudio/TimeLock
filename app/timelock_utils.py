@@ -7,6 +7,7 @@ from app.model import Checkin
 from sqlalchemy import desc
 from flask.ext.login import current_user
 from app.model import User, Company, Checkin, TimeCache, Post
+from flask import session
 
 def render_template(tmpl_name, **kwargs):
 	checkin = get_last_checkin_in_current_day()
@@ -95,5 +96,10 @@ def format_full_time_string_from_minutes(minutes):
 	minutes = minutes % 60
 	return "{} hours {} minutes".format(hours, minutes)
 
-
-
+def get_redirect_url_from_session():
+    redirect_url = session['redirect_url']
+    if redirect_url[0] == '"':
+        redirect_url = redirect_url[1:]
+    if redirect_url[-1] == '"':
+        redirect_url = redirect_url[:-1]
+    return redirect_url

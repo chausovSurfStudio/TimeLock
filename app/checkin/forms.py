@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
 from app.model import User, Checkin
@@ -59,5 +59,7 @@ class CheckinCustomTimeForm(Form):
 		if digit > 59 or digit < 0:
 			raise ValidationError('Wrong value, it takes value in range 0 - 59 ')
 
-
+class CreateNoteForm(Form):
+	body = TextAreaField("What do you notice?", validators = [Required()])
+	submit = SubmitField("Note")
 
