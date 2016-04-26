@@ -145,6 +145,15 @@ class User(UserMixin, db.Model):
             return None
         return User.query.get(data['id'])
 
+    def to_json(self):
+        json_user = {
+            'username': self.username,
+            'member_since': self.member_since,
+            'last_seen': self.last_seen,
+            'avatar': self.gravatar(size = 300),
+        }
+        return json_user
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -434,6 +443,13 @@ class Post(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.now)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def to_json(self):
+        json_post = {
+            'body': self.body,
+            'timestamp': self.timestamp,
+        }
+        return json_post
 
 class Note(db.Model):
     __tablename__ = 'notes'
