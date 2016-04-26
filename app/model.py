@@ -132,6 +132,19 @@ class User(UserMixin, db.Model):
     def equal_company(self, user):
         return self.company == user.company
 
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in = expiration)
+        return s.dumps({ 'id': self.id }).decode('ascii')
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return None
+        return User.query.get(data['id'])
+
     def __repr__(self):
         return '<User %r>' % self.username
 
