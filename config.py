@@ -14,6 +14,7 @@ class Config:
     TIMELOCK_MAIL_SUBJECT_PREFIX = '[TimeLock]'
     TIMELOCK_MAIL_SENDER = 'TimeLock Admin <chausov@surfstudio.ru>'
     TIMELOCK_ADMIN = os.environ.get('TIMELOCK_ADMIN')
+    TIMELOCK_POSTS_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):
