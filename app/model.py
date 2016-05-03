@@ -148,8 +148,8 @@ class User(UserMixin, db.Model):
     def to_json(self):
         json_user = {
             'username': self.username,
-            'member_since': self.member_since,
-            'last_seen': self.last_seen,
+            'member_since': self.member_since.strftime('%d.%m.%Y %H:%M:%S'),
+            'last_seen': self.last_seen.strftime('%d.%m.%Y %H:%M:%S'),
             'avatar': self.gravatar(size = 300),
             'id': self.id,
             'company_name': self.company.company_name,
@@ -159,8 +159,8 @@ class User(UserMixin, db.Model):
     def to_json_detailed(self):
         json_user = {
             'username': self.username,
-            'member_since': self.member_since,
-            'last_seen': self.last_seen,
+            'member_since': self.member_since.strftime('%d.%m.%Y %H:%M:%S'),
+            'last_seen': self.last_seen.strftime('%d.%m.%Y %H:%M:%S'),
             'avatar': self.gravatar(size=300),
             'id': self.id,
             'company_name': self.company.company_name,
@@ -464,7 +464,7 @@ class Post(db.Model):
         json_post = {
             'id': self.id,
             'body': self.body,
-            'timestamp': self.timestamp,
+            'timestamp': self.timestamp.strftime('%d.%m.%Y %H:%M:%S'),
             'author': self.author.to_json(),
         }
         return json_post
