@@ -10,7 +10,7 @@ def get_user(id):
         return jsonify(user.to_json_detailed())
     return jsonify(user.to_json())
 
-@api.route('/users')
+@api.route('/users/')
 def current_user():
     user = User.query.get_or_404(g.current_user.id)
     return jsonify(user.to_json_detailed())
