@@ -277,6 +277,70 @@ class Checkin(db.Model):
         return result_dict, week_time_string, week_time
 
     @staticmethod
+    def get_checkins_page_api(page, user_id):
+        current_day = datetime.now().date()
+        delta = timedelta(days = current_day.weekday() + 7 * (page - 1))
+
+        monday = current_day - delta
+        tuesday = monday + timedelta(days = 1)
+        wednesday = tuesday + timedelta(days = 1)
+        thursday = wednesday + timedelta(days = 1)
+        friday = thursday + timedelta(days = 1)
+        saturday = friday + timedelta(days = 1)
+        sunday = saturday + timedelta(days = 1)
+        next_monday = sunday + timedelta(days = 1)
+
+        dict = {
+        monday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(monday, tuesday)).order_by(Checkin.time),
+        tuesday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(tuesday, wednesday)).order_by(Checkin.time),
+        wednesday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(wednesday, thursday)).order_by(Checkin.time),
+        thursday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(thursday, friday)).order_by(Checkin.time),
+        friday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(friday, saturday)).order_by(Checkin.time),
+        saturday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(saturday, sunday)).order_by(Checkin.time),
+        sunday: Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(sunday, next_monday)).order_by(Checkin.time)
+        }
+
+        work_time_list = [
+        Checkin.get_work_time_for_checkins(dict[monday]),
+        Checkin.get_work_time_for_checkins(dict[tuesday]),
+        Checkin.get_work_time_for_checkins(dict[wednesday]),
+        Checkin.get_work_time_for_checkins(dict[thursday]),
+        Checkin.get_work_time_for_checkins(dict[friday]),
+        Checkin.get_work_time_for_checkins(dict[saturday]),
+        Checkin.get_work_time_for_checkins(dict[sunday])
+        ]
+
+        date_tuple = monday.isocalendar()
+        year = date_tuple[0]
+        week = date_tuple[1]
+        cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
+        cache_time = 0
+        if cache:
+            cache_time = cache.time
+
+        notes = {
+        monday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(monday, datetime.min.time())).order_by(Note.id).all(),
+        tuesday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(tuesday, datetime.min.time())).order_by(Note.id).all(),
+        wednesday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(wednesday, datetime.min.time())).order_by(Note.id).all(),
+        thursday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(thursday, datetime.min.time())).order_by(Note.id).all(),
+        friday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(friday, datetime.min.time())).order_by(Note.id).all(),
+        saturday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(saturday, datetime.min.time())).order_by(Note.id).all(),
+        sunday: Note.query.filter_by(author_id = user_id, timestamp = datetime.combine(sunday, datetime.min.time())).order_by(Note.id).all(),
+        }
+
+        result_dict = {
+        monday: [dict[monday], work_time_list[0], notes[monday]],
+        tuesday: [dict[tuesday], work_time_list[1], notes[tuesday]],
+        wednesday: [dict[wednesday], work_time_list[2], notes[wednesday]],
+        thursday: [dict[thursday], work_time_list[3], notes[thursday]],
+        friday: [dict[friday], work_time_list[4], notes[friday]],
+        saturday: [dict[saturday], work_time_list[5], notes[saturday]],
+        sunday: [dict[sunday], work_time_list[6], notes[sunday]] 
+        }
+
+        return result_dict, cache_time
+
+    @staticmethod
     def get_graphics_html(checkins, weekday):
         result_string = "";
 
@@ -392,6 +456,14 @@ class Checkin(db.Model):
             i += 1
         return time
 
+    def to_json(self):
+        json_post = {
+            'id': self.id,
+            'trust_level': self.trustLevel,
+            'time': self.time.strftime('%d.%m.%Y %H:%M:%S'),
+        }
+        return json_post
+
 class TimeCache(db.Model):
     __tablename__ = 'timeCaches'
     id = db.Column(db.Integer, primary_key = True)
@@ -476,6 +548,13 @@ class Note(db.Model):
     timestamp = db.Column(db.DateTime, index = True, default = datetime.now)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def to_json(self):
+        json_post = {
+            'id': self.id,
+            'body': self.body,
+            'timestamp': self.timestamp.strftime('%d.%m.%Y %H:%M:%S'),
+        }
+        return json_post
 
 
 
