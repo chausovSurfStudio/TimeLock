@@ -18,6 +18,9 @@ class Permission:
     MODERATOR= 0x08
     ADMINISTER = 0x80
 
+
+############################################################################################################################################ 
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key = True)
@@ -43,6 +46,9 @@ class Role(db.Model):
 
     def __repr__(self):
         return '<Role %r>' % self.name
+
+
+############################################################################################################################################ 
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -173,6 +179,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+
+############################################################################################################################################ 
+
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False
@@ -187,11 +196,17 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+
+############################################################################################################################################ 
+
 class Company(db.Model):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key = True)
     company_name = db.Column(db.String(64), unique = True, index = True)
     users = db.relationship('User', backref = 'company', lazy = 'dynamic')
+
+
+############################################################################################################################################ 
 
 class Checkin(db.Model):
     __tablename__ = 'checkins'
@@ -456,13 +471,17 @@ class Checkin(db.Model):
             i += 1
         return time
 
-    def to_json(self):
+    def to_json(self, date):
         json_post = {
             'id': self.id,
             'trust_level': self.trustLevel,
             'time': self.time.strftime('%d.%m.%Y %H:%M:%S'),
+            'date': date,
         }
         return json_post
+
+
+############################################################################################################################################ 
 
 class TimeCache(db.Model):
     __tablename__ = 'timeCaches'
@@ -525,6 +544,9 @@ class TimeCache(db.Model):
     def get_last_day(dt):
         return TimeCache.get_first_day(dt, 0, 1) + timedelta(-1)
 
+
+############################################################################################################################################ 
+
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key = True)
@@ -541,6 +563,9 @@ class Post(db.Model):
         }
         return json_post
 
+
+############################################################################################################################################      
+
 class Note(db.Model):
     __tablename__ = 'notes'
     id = db.Column(db.Integer, primary_key = True)
@@ -548,11 +573,12 @@ class Note(db.Model):
     timestamp = db.Column(db.DateTime, index = True, default = datetime.now)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def to_json(self):
+    def to_json(self, date):
         json_post = {
             'id': self.id,
             'body': self.body,
             'timestamp': self.timestamp.strftime('%d.%m.%Y %H:%M:%S'),
+            'date': date,
         }
         return json_post
 
