@@ -6,7 +6,8 @@ from .errors import forbidden
 
 @api.route('/checkins/')
 def get_checkins_page():
-	(dict, cache) = Checkin.get_checkins_page_api(1, g.current_user.id)
+	page = request.args.get('page', 1, type = int)
+	(dict, cache) = Checkin.get_checkins_page_api(page, g.current_user.id)
 	keys = dict.keys()
 	keys.sort()
 
@@ -22,4 +23,5 @@ def get_checkins_page():
 			result_json["notes"].append(note.to_json(date_string))
 		result_json["times"].append(dict[date][1])
 	result_json["times"].append(cache)
+	result_json["monday"] = keys[0].strftime('%d.%m.%Y %H:%M:%S')
 	return jsonify(result_json)
