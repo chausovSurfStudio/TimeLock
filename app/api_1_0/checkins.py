@@ -2,7 +2,7 @@
 
 from flask import jsonify, request, g, abort, url_for, current_app
 from app import db
-from app.model import Checkin, User
+from app.model import Checkin, User, TimeCache
 from . import api
 from .errors import forbidden, bad_request
 from datetime import datetime
@@ -38,6 +38,7 @@ def delete_checkin(checkin_id):
 	if checkin.user_id != g.current_user.id:
 		return bad_request(u'Вы не можете изменять чекины других пользователей')
 	db.session.delete(checkin)
+	TimeCache.update_cache(g.current_user.id, checkin.time)
 	return jsonify({'success': True})
 
 @api.route('/checkins/', methods = ['POST'])
@@ -55,6 +56,7 @@ def create_checkin():
 	checkin = Checkin(user_id = g.current_user.id, time = date, trustLevel = False)
 	db.session.add(checkin)
 	db.session.commit()
+	TimeCache.update_cache(g.current_user.id, checkin.time)
 	result_json = {}
 	result_json['checkin'] = checkin.to_json(checkin.time.date().strftime('%d.%m.%Y %H:%M:%S'))
 	result_json['success'] = True
@@ -80,6 +82,7 @@ def edit_checkin(checkin_id):
 	checkin.time = date
 	db.session.add(checkin)
 	db.session.commit()
+	TimeCache.update_cache(g.current_user.id, checkin.time)
 	result_json = {}
 	result_json['checkin'] = checkin.to_json(checkin.time.date().strftime('%d.%m.%Y %H:%M:%S'))
 	result_json['success'] = True
