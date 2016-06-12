@@ -216,23 +216,22 @@ class Profiler(object):
 @main.route('/my_company', methods = ['GET'])
 @admin_moderator_required
 def my_company():
-	with Profiler() as p:
-		page = request.args.get('page', 1, type = int)
-		week_titles, month_title = get_titles_for_employee_header(page)
-		company = current_user.company;
-		clear_times = {}
-		for employee in company.users:
-			clear_times[employee.id] = TimeCache.get_cached_week_time(employee.id, page)
-		string_times = {}
-		delta_string_times = {}
-		for employee in company.users:
-			string_times[employee.id] = []
-			delta_string_times[employee.id] = []
-			for time in clear_times[employee.id]:
-				string_times[employee.id].append(get_work_time_string(time))
-				delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
-		return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, 
-			month_title = month_title, week_titles = week_titles, pagination_url = "my_company?page=", page = page)
+	page = request.args.get('page', 1, type = int)
+	week_titles, month_title = get_titles_for_employee_header(page)
+	company = current_user.company;
+	clear_times = {}
+	for employee in company.users:
+		clear_times[employee.id] = TimeCache.get_cached_week_time(employee.id, page)
+	string_times = {}
+	delta_string_times = {}
+	for employee in company.users:
+		string_times[employee.id] = []
+		delta_string_times[employee.id] = []
+		for time in clear_times[employee.id]:
+			string_times[employee.id].append(get_work_time_string(time))
+			delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
+	return render_template('company.html', company = company, string_times = string_times, delta_string_times = delta_string_times, 
+		month_title = month_title, week_titles = week_titles, pagination_url = "my_company?page=", page = page)
 
 def get_work_time_string(time):
 	value_hours = time // 60

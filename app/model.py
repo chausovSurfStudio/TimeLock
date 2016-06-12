@@ -521,37 +521,37 @@ class TimeCache(db.Model):
         last_day = TimeCache.get_last_day(first_day)
         day = first_day;
 
-        (year, week, weekday) = day.isocalendar()
-        (end_year, end_week, weekday) = last_day.isocalendar()
-        times = [];
-        while year < end_year or (year == end_year and week <= end_week):
-            delta = timedelta(days = day.weekday())
-            begin_day = day - delta;
-            i = 0
-            time = 0
-            while i < 7:
-                end_day = begin_day + timedelta(days = 1)
-                checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(begin_day, end_day)).order_by(Checkin.time)
-                time += Checkin.get_work_time_for_checkins(checkins)
-                begin_day = end_day
-                i += 1
-            times.append(time)
-            day = day + timedelta(days = 7)
-            (year, week, weekday) = day.isocalendar()
-        return times
-
         # (year, week, weekday) = day.isocalendar()
         # (end_year, end_week, weekday) = last_day.isocalendar()
-        # time = [];
+        # times = [];
         # while year < end_year or (year == end_year and week <= end_week):
-        #     cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
-        #     if cache is not None:
-        #         time.append(cache.time)
-        #     else:
-        #         time.append(0)
+        #     delta = timedelta(days = day.weekday())
+        #     begin_day = day - delta;
+        #     i = 0
+        #     time = 0
+        #     while i < 7:
+        #         end_day = begin_day + timedelta(days = 1)
+        #         checkins = Checkin.query.filter_by(user_id = user_id).filter(Checkin.time.between(begin_day, end_day)).order_by(Checkin.time)
+        #         time += Checkin.get_work_time_for_checkins(checkins)
+        #         begin_day = end_day
+        #         i += 1
+        #     times.append(time)
         #     day = day + timedelta(days = 7)
         #     (year, week, weekday) = day.isocalendar()
-        # return time
+        # return times
+
+        (year, week, weekday) = day.isocalendar()
+        (end_year, end_week, weekday) = last_day.isocalendar()
+        time = [];
+        while year < end_year or (year == end_year and week <= end_week):
+            cache = TimeCache.query.filter_by(user_id = user_id, year = year, week = week).first()
+            if cache is not None:
+                time.append(cache.time)
+            else:
+                time.append(0)
+            day = day + timedelta(days = 7)
+            (year, week, weekday) = day.isocalendar()
+        return time
 
     @staticmethod
     def get_first_day(dt, d_years = 0, d_months = 0):
