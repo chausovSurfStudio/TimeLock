@@ -126,7 +126,7 @@ class NewUserForm(Form):
             raise ValidationError('Email already registered')
 
 class PostForm(Form):
-    body = TextAreaField("What's on yout mind?", validators = [Required()])
+    body = TextAreaField("What's on your mind?", validators = [Required()])
     submit = SubmitField("Send")
 
 class ConfirmDeleteDBEntityForm(Form):

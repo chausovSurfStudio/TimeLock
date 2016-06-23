@@ -216,6 +216,41 @@ class Profiler(object):
 @main.route('/my_company', methods = ['GET'])
 @admin_moderator_required
 def my_company():
+
+########################################################################################################################
+
+	# i = 0
+	# while i < 10:
+	# 	with Profiler() as p:
+	# 		i += 1
+	# 		page = request.args.get('page', 1, type = int)
+	# 		week_titles, month_title = get_titles_for_employee_header(page)
+	# 		company = current_user.company;
+	# 		clear_times = {}
+	# 		needed_count = 100
+	# 		count = 1
+	# 		for employee in company.users:
+	# 			clear_times[employee.id] = TimeCache.get_cached_week_time(employee.id, page)
+	# 			if count > needed_count:
+	# 				break
+	# 			else:
+	# 				count += 1
+	# 		count = 1
+	# 		string_times = {}
+	# 		delta_string_times = {}
+	# 		for employee in company.users:
+	# 			string_times[employee.id] = []
+	# 			delta_string_times[employee.id] = []
+	# 			for time in clear_times[employee.id]:
+	# 				string_times[employee.id].append(get_work_time_string(time))
+	# 				delta_string_times[employee.id].append(get_delta_work_time_string(time, employee.rate))
+	# 			if count > needed_count:
+	# 				break
+	# 			else:
+	# 				count += 1
+
+########################################################################################################################
+
 	page = request.args.get('page', 1, type = int)
 	week_titles, month_title = get_titles_for_employee_header(page)
 	company = current_user.company;

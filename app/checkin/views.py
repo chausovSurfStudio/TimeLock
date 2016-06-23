@@ -40,6 +40,73 @@ def index():
     if delta_minutes < 10:
         delta_minutes = "0{}".format(delta_minutes)
     delta_string = "{}:{}".format(delta_hours, delta_minutes)
+
+##########################################################################################
+    
+    # user_id = 35
+    # time_string1 = "{} {} {} {} {}".format(25, 4, 2016, 8, 0)
+    # custom_date1 = datetime.strptime(time_string1, "%d %m %Y %H %M")
+    # time_string2 = "{} {} {} {} {}".format(25, 4, 2016, 16, 10)
+    # custom_date2 = datetime.strptime(time_string2, "%d %m %Y %H %M")
+    # i = 0
+    # j = 0
+    # while i < 6:
+    #     while j < 5:
+    #         checkin1 = Checkin(time = custom_date1, user_id = user_id, trustLevel = True)
+    #         checkin2 = Checkin(time = custom_date2, user_id = user_id, trustLevel = True)
+    #         db.session.add(checkin1)
+    #         db.session.add(checkin2)
+    #         custom_date1 = custom_date1 + timedelta(days = 1)
+    #         custom_date2 = custom_date2 + timedelta(days = 1)
+    #         j += 1
+    #     j = 0
+    #     TimeCache.update_cache(user_id, custom_date1)
+    #     custom_date1 = custom_date1 + timedelta(days = 2)
+    #     custom_date2 = custom_date2 + timedelta(days = 2)
+    #     i += 1   
+
+##########################################################################################
+
+    # q = 56
+    # while q < 101:
+    #     email_string = "qwe{}@qwe.qw".format(q)
+    #     first_name_string = "Qwe"
+    #     last_name_string = "Qwe{}".format(q)
+    #     password = "password"
+    #     user = User(email = email_string, first_name = first_name_string, last_name = last_name_string)
+    #     user.password = password
+    #     user.company = Company.query.filter_by(company_name = "Surf").first()
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     print("User Qwe{} has been added".format(q))
+
+    #     user_id = user.id
+    #     time_string1 = "{} {} {} {} {}".format(25, 4, 2016, 8, 0)
+    #     custom_date1 = datetime.strptime(time_string1, "%d %m %Y %H %M")
+    #     time_string2 = "{} {} {} {} {}".format(25, 4, 2016, 16, 10)
+    #     custom_date2 = datetime.strptime(time_string2, "%d %m %Y %H %M")
+    #     i = 0
+    #     j = 0
+    #     while i < 6:
+    #         while j < 5:
+    #             checkin1 = Checkin(time = custom_date1, user_id = user_id, trustLevel = True)
+    #             checkin2 = Checkin(time = custom_date2, user_id = user_id, trustLevel = True)
+    #             db.session.add(checkin1)
+    #             db.session.add(checkin2)
+    #             custom_date1 = custom_date1 + timedelta(days = 1)
+    #             custom_date2 = custom_date2 + timedelta(days = 1)
+    #             j += 1
+    #         j = 0
+    #         TimeCache.update_cache(user_id, custom_date1)
+    #         custom_date1 = custom_date1 + timedelta(days = 2)
+    #         custom_date2 = custom_date2 + timedelta(days = 2)
+    #         i += 1
+    #     q += 1
+    #     print("Checkins added")
+
+
+##########################################################################################
+
     
     return render_template('checkin/checkin_main.html', user = current_user, graphs = graphs, keys = keys, page = page, 
     	need_title = need_week_title, prev_title = prev_week_title, next_title = next_week_title, 
